@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="page-header">
+    <h1>
+      Próximos shows
+    </h1>
+  </div>
+  <div class="panel panel-default" data-ng-repeat="job in ctrl.jobs">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{job.name}}</h3>
+    </div>
+    <div class="panel-body">
+      <p>{{job.date}}</p>
+      <div data-ng-repeat="section in job.sections">
+        <div class="alert alert-warning" role="alert">
+          <h5 class="close">{{section.timestamp}}</h5>
+          {{section.description}} <strong>{{section.section_availability}}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="button" data-ng-click="ctrl.runJobs()">Check!</button>
+</div>
+
+
+<div class="container">
+  <div class="page-header">
+    <h1>
+      Agregar nuevo show
+    </h1>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon3">http://www.ticketek.com.ar/websource/show/</span>
+      <input type="text" class="form-control" data-ng-model="ctrl.search">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" data-ng-click="ctrl.searchShow()">Buscar</button>
+      </span>
+    </div>
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">@</span>
+    <input type="text" class="form-control" placeholder="Descripción" data-ng-model="ctrl.show.author" disabled>
+  </div>
+
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Fecha</span>
+    <input type="text" class="form-control" placeholder="Fecha" data-ng-model="ctrl.show.date" disabled>
+  </div>
+
+  <div class="container">
+    <p>Sectores</p>
+    <ul class="list-group" data-ng-repeat="section in ctrl.show.sections">
+      <li class="list-group-item">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <input type="checkbox" data-ng-model="section.selected">
+          </span>
+          <input type="text" class="form-control" data-ng-model="section.description" disabled>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <button class="btn btn-primary" type="button" data-ng-click="ctrl.createNewJob()">Aceptar</button>
+</div>
