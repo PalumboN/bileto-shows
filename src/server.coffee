@@ -2,9 +2,9 @@ require('./globals')
 _ = require('lodash')
 express = require('express')
 bodyParser = require('body-parser')
+config = require('./config')
 job = require('./models/job')
 {Show} = require('./models/schemas')
-config = require('./models/config')
 ticketek = require('./models/ticketek')
 
 app = express()
@@ -46,6 +46,7 @@ app.get '/shows/:show', ({ params }, res) ->
 path = __dirname + "/app"
 app.set "views", path
 
+app.use express.static(__dirname + "/..")
 app.use express.static(path)
 app.set "appPath", path
 

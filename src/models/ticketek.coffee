@@ -1,7 +1,7 @@
 _ = require('lodash')
 request = require('request')
 Promise = require('bluebird')
-{ticketek} = require('./config')
+{ticketek} = require('../config')
 rp = Promise.promisify request
 
 

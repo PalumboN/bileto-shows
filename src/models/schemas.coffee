@@ -1,4 +1,4 @@
-config = require('./config').mongo
+config = require('../config').mongo
 mongoose = require('mongoose')
 mongoose.connect(config.uri)
 mongoose.Promise = require('bluebird')
