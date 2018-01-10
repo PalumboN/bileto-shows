@@ -2,15 +2,33 @@ request = require('request')
 {ticketek} = require('../config')
 rp = Promise.promisify request
 
-makeShowURI = (show) -> "http://www.ticketek.com.ar/websource/show/#{show}/"
+baseUrl = "https://www.ticketek.com.ar"
 
-makeShowRequest = (show) ->
+
+login = ->
   jar = request.jar()
-  cookie = request.cookie("sessionid=#{ticketek.sessionid}")
-  url = makeShowURI show
-  console.log url
-  jar.setCookie(cookie, url)
-  rp {url, jar}
+  url = "#{baseUrl}/websource/auth/login/"
+  request
+  .postAsync url, {
+    form:
+      login: ticketek.login
+      password: ticketek.password
+    jar
+  }
+  .then (response) ->
+    cookies = jar.getCookies url
+    cookies[0].value
+
+
+makeShowURI = (show) -> "#{baseUrl}/websource/show/#{show}/"
+makeShowRequest = (show) ->
+  login().then (sessionid) ->
+    jar = request.jar()
+    cookie = request.cookie("sessionid=#{sessionid}")
+    url = makeShowURI show
+    console.log url
+    jar.setCookie(cookie, url)
+    rp {url, jar}
 
 
 parseScript = (body) ->
