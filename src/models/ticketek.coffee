@@ -1,10 +1,6 @@
-_ = require('lodash')
 request = require('request')
-Promise = require('bluebird')
 {ticketek} = require('../config')
 rp = Promise.promisify request
-
-
 
 makeShowURI = (show) -> "http://www.ticketek.com.ar/websource/show/#{show}/"
 
@@ -17,7 +13,7 @@ makeShowRequest = (show) ->
   rp {url, jar}
 
 
-getScript = (body) ->
+parseScript = (body) ->
   scripts = _.split body, '<script type="text/javascript">'
   script = _.find scripts, (it) -> it.includes "json_context"
   script = _.split script, '</script>', 1
@@ -48,5 +44,9 @@ module.exports =
   getPerformances: (show) ->
     makeShowRequest show
     .then ({body}) =>
-      eval getScript body
+      eval parseScript body
+      try
+        json_context
+      catch error
+        throw "'json_context' not found"
       toPerformances json_context
