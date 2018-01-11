@@ -1,8 +1,7 @@
-require('./globals')
 express = require('express')
 bodyParser = require('body-parser')
 config = require('./config')
-job = require('./models/job')
+job = require('./job')
 {Show} = require('./models/schemas')
 ticketek = require('./models/ticketek')
 

@@ -1,8 +1,7 @@
-_ = require('lodash')
-{Show} = require('./schemas')
-ticketek = require('./ticketek')
-telegram = require('./telegram')
-{mapSeries} = require('bluebird')
+{Show} = require('./models/schemas')
+ticketek = require('./models/ticketek')
+telegram = require('./models/telegram')
+{mapSeries} = Promise
 
 
 isSync = (section, tShow) ->

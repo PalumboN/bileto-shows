@@ -1,3 +1,3 @@
-require("coffee-script/register");
-
+require("coffee-script/register")
+require('./src/globals')
 require("./src/server")

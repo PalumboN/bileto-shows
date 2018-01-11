@@ -5,6 +5,7 @@
   "scripts": {
     "preinstall": "npm install './src/app'",
     "start": "node index.js",
+    "job": "node job.js",
     "test": ""
   },
   "author": "PalumboN",
