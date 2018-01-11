@@ -12,7 +12,9 @@ app.use bodyParser.json()
 
 
 send = (res) -> (result) -> res.send result
-errorHandler = (res) -> (error) -> res.status(500).send {error}
+errorHandler = (res) -> (error) ->
+  console.log error
+  res.status(500).send {error}
 
 finish = (res, promise) ->
   promise
@@ -39,7 +41,7 @@ app.get '/shows/:show', ({ params }, res) ->
 path = __dirname + "/app"
 app.set "views", path
 
-app.use express.static(__dirname + "/..")
+app.use express.static(__dirname + "/..") # node_modules
 app.use express.static(path)
 app.set "appPath", path
 

@@ -43,7 +43,7 @@ run = ->
   .then (shows) ->
     mapSeries shows, update
   .tap (results) ->
-    telegram.sendMessage results if not _.every results, "sync"
+    telegram.sendResults results if not _.every results, "sync"
   .tap (results) ->
     mapSeries results, ({show}) -> save show
 
