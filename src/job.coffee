@@ -43,7 +43,7 @@ module.exports = (db) ->
     .then (shows) ->
       mapSeries shows, update
     .tap (results) ->
-      telegram.sendResults results if not _.every results, "sync"
+      results.filter((it) -> not it.sync).forEach(telegram.sendShowChange)
     .tap (results) ->
       mapSeries results, ({show}) -> save show
 

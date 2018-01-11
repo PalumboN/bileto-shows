@@ -2,13 +2,14 @@ request = require('request')
 {telegram} = require('../config')
 token = telegram.token
 
-forHumans = ({show, sync, error}) ->
-  if error?
-    status = error
-  else
-    status = if sync then "OK" else "CHANGED"
+sectionString = ({description, full_price, section_availability}) ->
+  "#{description} - $#{full_price}: #{section_availability}"
 
-  "#{show.name} - #{show.date}: #{status}"
+forHumans = ({show, sync, error}) ->
+  text = "#{show.name} - #{show.date}\n"
+  return text + error if error?
+  text + show.sections.map(sectionString).join('\n')
+
 
 sendMessage = (message) ->
   opts =
@@ -22,8 +23,8 @@ sendMessage = (message) ->
   request.postAsync opts
 
 
-sendResults = (results) ->
-  sendMessage "RESULTADO DE LA CORRIDA:\n" + results.map(forHumans).join('\n')
+sendShowChange = (result) ->
+  sendMessage "CAMBIÓ LA DISPONIBILIDAD DE\n" + forHumans result
 
 
-module.exports = { sendResults }
+module.exports = { sendShowChange }
