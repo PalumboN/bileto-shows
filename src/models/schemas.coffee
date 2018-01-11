@@ -1,8 +1,4 @@
-config = require('../config').mongo
 mongoose = require('mongoose')
-mongoose.connect(config.uri)
-mongoose.Promise = require('bluebird')
-
 Schema = mongoose.Schema
 Mixed = Schema.Types.Mixed
 
@@ -25,5 +21,5 @@ Show = new Schema
     timestamp: Date
   ]
 
-module.exports =
-  Show: mongoose.model 'Show', Show
+module.exports = (db) ->
+  Show: db.model 'Show', Show

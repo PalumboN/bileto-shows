@@ -1,52 +1,53 @@
-express = require('express')
-bodyParser = require('body-parser')
-config = require('./config')
-job = require('./job')
-{Show} = require('./models/schemas')
-ticketek = require('./models/ticketek')
+module.exports = (db) ->
+  express = require('express')
+  bodyParser = require('body-parser')
+  config = require('./config')
+  job = require('./job')
+  {Show} = require('./models/schemas')(db)
+  ticketek = require('./models/ticketek')
 
-app = express()
+  app = express()
 
-app.use bodyParser.json()
-
-
-send = (res) -> (result) -> res.send result
-errorHandler = (res) -> (error) ->
-  console.log error
-  res.status(500).send {error}
-
-finish = (res, promise) ->
-  promise
-  .then send res
-  .catch errorHandler res
+  app.use bodyParser.json()
 
 
-app.get '/ping', (req, res) ->
-  res.send("pong")
+  send = (res) -> (result) -> res.send result
+  errorHandler = (res) -> (error) ->
+    console.log error
+    res.status(500).send {error}
 
-app.get '/jobs', (req, res) ->
-  finish res, Show.find()
-
-app.post '/jobs', ({body}, res) ->
-  finish res, Show.create body
-
-app.post '/jobs/run', (req, res) ->
-  finish res, job.run()
-
-app.get '/shows/:show', ({ params }, res) ->
-  finish res, ticketek.getPerformances params.show
+  finish = (res, promise) ->
+    promise
+    .then send res
+    .catch errorHandler res
 
 
-path = __dirname + "/app"
-app.set "views", path
+  app.get '/ping', (req, res) ->
+    res.send("pong")
 
-app.use express.static(__dirname + "/..") # node_modules
-app.use express.static(path)
-app.set "appPath", path
+  app.get '/jobs', (req, res) ->
+    finish res, Show.find()
 
-app.get '/', (req, res) -> res.sendFile path + "/index.html"
+  app.post '/jobs', ({body}, res) ->
+    finish res, Show.create body
+
+  app.post '/jobs/run', (req, res) ->
+    finish res, job(db).run()
+
+  app.get '/shows/:show', ({ params }, res) ->
+    finish res, ticketek.getPerformances params.show
 
 
-port = config.port
-app.listen port, ->
-  console.log "Listen port #{port}"
+  path = __dirname + "/app"
+  app.set "views", path
+
+  app.use express.static(__dirname + "/..") # node_modules
+  app.use express.static(path)
+  app.set "appPath", path
+
+  app.get '/', (req, res) -> res.sendFile path + "/index.html"
+
+
+  port = config.port
+  app.listen port, ->
+    console.log "Listen port #{port}"

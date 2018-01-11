@@ -1,3 +1,8 @@
 require("coffee-script/register")
 require('./src/globals')
-require("./src/server")
+
+const mongoose = require('mongoose')
+const {mongo} = require('./src/config')
+mongoose
+  .connect(mongo.uri, { useMongoClient: true })
+  .then((db) => require("./src/server")(db))
