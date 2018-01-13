@@ -1,6 +1,5 @@
 request = require('request')
-{telegram} = require('../config')
-token = telegram.token
+{telegram: {token, chatId}} = require('../config')
 
 sectionString = ({description, full_price, section_availability}) ->
   "#{description} - $#{full_price}: #{section_availability}"
@@ -17,7 +16,7 @@ sendMessage = (message) ->
     uri: "https://api.telegram.org/bot#{token}/sendMessage"
     json: true
     body:
-      chat_id: 303722247
+      chat_id: chatId
       text: message
 
   request.postAsync opts
