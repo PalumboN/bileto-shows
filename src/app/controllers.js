@@ -9,6 +9,11 @@ class ShowsController {
     .then((it) => { this.jobs = it })
   }
 
+  loadArchived() {
+    this.get("jobs/archive")
+    .then((it) => { this.archivedJobs = it })
+  }
+
   runJobs() {
     this.runningJob = true
     this.post("jobs/run")
@@ -43,6 +48,12 @@ class ShowsController {
   archive(job) {
     this.delete(`jobs/${job._id}`)
     .then(() => this.loadJobs())
+  }
+
+  reactive(job) {
+    this.post(`jobs/reopen/${job._id}`)
+    .then(() => this.loadJobs())
+    .then(() => this.loadArchived())
   }
 
   get(path) {

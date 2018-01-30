@@ -43,16 +43,16 @@
 
   <div class="panel panel-default" data-ng-repeat="job in ctrl.jobs">
     <div class="panel-heading">
-      <h3 class="panel-title">{{job.name}}</h3>
-      <a href="" data-ng-click="ctrl.archive(job)">Archivar</a>
+      <h3 class="panel-title col col-md-11">{{job.name}}</h3>
+      <a href="" data-ng-click="ctrl.archive(job)"><i class="fa fa-trash fa-lg text-danger" aria-hidden="true"></i></a>
     </div>
     <div class="panel-body">
       <p>{{job.author}} - {{job.date}}</p>
         <table class="table table-hover" data-ng-repeat="section in job.sections">
-          <tr class="active">
-            <td>{{section.description}} (${{section.full_price}})</td>
-            <td><strong>{{section.section_availability}}</strong></td>
-            <td><span am-time-ago="section.timestamp"></span></td>
+          <tr class="active row">
+            <td class="col col-md-3">{{section.description}} (${{section.full_price}})</td>
+            <td class="col col-md-2"><strong>{{section.section_availability}}</strong></td>
+            <td class="col col-md-7 text-right"><span am-time-ago="section.timestamp"></span></td>
           </tr>
         </table>
       </div>
@@ -64,9 +64,29 @@
   <span class="sr-only" data-ng-show="ctrl.runningJob">Loading...</span>
 </div>
 
+<hr>
 
 <div class="container">
-  <div class="page-header">
+  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+  <a data-toggle="collapse" href="#collapseArchived" aria-expanded="false" data-ng-click="ctrl.loadArchived()">Ver archivados</a>
+  <div class="collapse" id="collapseArchived">
+    <div class="panel panel-default" data-ng-repeat="job in ctrl.archivedJobs">
+      <div class="panel-heading">
+        <h3 class="panel-title col col-md-11">{{job.name}}</h3>
+        <a href="" data-ng-click="ctrl.reactive(job)">Reactivar</a>
+      </div>
+      <div class="panel-body">
+        <p>{{job.author}} - {{job.date}}</p>
+          <table class="table table-hover" data-ng-repeat="section in job.sections">
+            <tr class="active row">
+              <td class="col col-md-3">{{section.description}} (${{section.full_price}})</td>
+              <td class="col col-md-2"><strong>{{section.section_availability}}</strong></td>
+              <td class="col col-md-7 text-right"><span am-time-ago="section.timestamp"></span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
 
   </div>
 </div>

@@ -39,7 +39,7 @@ module.exports = (db) ->
 
   run = ->
     Show
-    .find()
+    .findOpen()
     .then (shows) ->
       mapSeries shows, update
     .tap (results) ->

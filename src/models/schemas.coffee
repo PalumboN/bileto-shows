@@ -25,5 +25,8 @@ Show = new Schema
     required: true
     default: false
 
+Show.statics.findOpen = -> this.find archive: false
+Show.statics.findArchive = -> this.find archive: true
+
 module.exports = (db) ->
   Show: db.model 'Show', Show
