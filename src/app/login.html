@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="bileto.login">
+
+<head>
+  <meta charset="utf-8">
+  <title>Bileto - Login</title>
+
+  <!-- JQUERY -->
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+  <!-- BOOTSTRAP -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- FONTAWESOME -->
+  <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+
+  <!-- ANGULAR  -->
+  <script src="node_modules/angular/angular.min.js"></script>
+  <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+  <!-- UTILS  -->
+  <script src="node_modules/lodash/lodash.min.js"></script>
+  <script src="node_modules/bluebird/js/browser/bluebird.min.js"></script>
+  <script src="node_modules/moment/min/moment-with-locales.min.js"></script>
+  <script src="node_modules/angular-moment/angular-moment.js"></script>
+</head>
+
+<body class="homepage">
+  <section class="transparent-bg" ng-controller="LoginCtrl as ctrl">
+
+    <form class="card col col-xs-6 col-xs-offset-3" action="/login" method="post">
+      <div class="card-body">
+          <div>
+              <label>Usuario:</label>
+              <input type="text" name="username" ng-model="ctrl.credentials.username"/>
+          </div>
+          <div>
+              <label>Contraseña:</label>
+              <input type="password" name="password" ng-model="ctrl.credentials.password"/>
+          </div>
+          <div>
+              <input type="submit" class="btn btn-primary" value="Log In" ng-click="ctrl.login()"/>
+          </div>
+      </div>
+    </form>
+  </section>
+
+  <script src="login.js"></script>
+</body>
+
+</html>
