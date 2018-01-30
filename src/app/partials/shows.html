@@ -44,6 +44,7 @@
   <div class="panel panel-default" data-ng-repeat="job in ctrl.jobs">
     <div class="panel-heading">
       <h3 class="panel-title">{{job.name}}</h3>
+      <a href="" data-ng-click="ctrl.archive(job)">Archivar</a>
     </div>
     <div class="panel-body">
       <p>{{job.author}} - {{job.date}}</p>
@@ -51,7 +52,7 @@
           <tr class="active">
             <td>{{section.description}} (${{section.full_price}})</td>
             <td><strong>{{section.section_availability}}</strong></td>
-            <td><span class="close" am-time-ago="section.timestamp"></span></td>
+            <td><span am-time-ago="section.timestamp"></span></td>
           </tr>
         </table>
       </div>

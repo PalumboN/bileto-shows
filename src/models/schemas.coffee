@@ -20,6 +20,10 @@ Show = new Schema
     full_price: String
     timestamp: Date
   ]
+  archive:
+    type: Boolean
+    required: true
+    default: false
 
 module.exports = (db) ->
   Show: db.model 'Show', Show

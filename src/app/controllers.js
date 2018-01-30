@@ -33,10 +33,16 @@ class ShowsController {
 
   createNewJob() {
     _.remove(this.show.sections, (it) => !it.selected)
+
     this.post("jobs", this.show)
     .then(() => delete this.show)
     .then(() => this.loadJobs())
     .then(() => $('.collapse').collapse())
+  }
+
+  archive(job) {
+    this.delete(`jobs/${job._id}`)
+    .then(() => this.loadJobs())
   }
 
   get(path) {
@@ -47,5 +53,10 @@ class ShowsController {
   post(path, body) {
     var getData = (response) => response.data
     return this.$http.post(path, body).then(getData)
+  }
+
+  delete(path) {
+    var getData = (response) => response.data
+    return this.$http.delete(path).then(getData)
   }
 }
