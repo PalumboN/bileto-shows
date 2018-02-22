@@ -37,15 +37,14 @@ module.exports = (db) ->
       console.log {err}
       result.error = err
       result
+    .tap (result) ->
+      telegram.sendShowChange if not result.sync
+    .tap ({show, error}) ->
+      save show if not error
 
   run = ->
     Show
     .findOpen()
-    .map (shows) ->
-      mapSeries shows, update
-    .tap (results) ->
-      results.filter(({sync, error}) -> not sync and not error).forEach(telegram.sendShowChange)
-    .tap (results) ->
-      mapSeries(results.filter(({error}) -> not error), ({show}) -> save show)
+    .then (shows) -> mapSeries shows, update
 
   return { run }
