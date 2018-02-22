@@ -11,6 +11,8 @@ forHumans = ({show, sync, error}) ->
 
 
 sendMessage = (message) ->
+  console.log "Enviando mensaje: " + message
+
   opts =
     method: "POST"
     uri: "https://api.telegram.org/bot#{token}/sendMessage"

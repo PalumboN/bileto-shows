@@ -39,9 +39,10 @@ parseScript = (body) ->
 
 toCategoryString = (category) => category.description + '($' + category.full_price + ') - ' + category.section_availability
 
-importantData = (performace) =>
+importantData = (performace, name) =>
   prices = performace["price-types"]
   {
+    name
     id: performace.id
     place: performace.venue
     author: performace.who
@@ -52,10 +53,10 @@ importantData = (performace) =>
       .map (it) => _.pick it, "id", "description", "section_availability", "full_price"
   }
 
-toPerformances = ({performances}) =>
+toPerformances = ({performances}, show) =>
   Object.values performances
   .filter (it) => it != undefined
-  .map importantData
+  .map (it) => importantData it, show
 
 
 module.exports =
@@ -67,4 +68,4 @@ module.exports =
         json_context
       catch error
         throw "'json_context' not found"
-      toPerformances json_context
+      toPerformances json_context, show

@@ -41,7 +41,7 @@ module.exports = (db) ->
   run = ->
     Show
     .findOpen()
-    .then (shows) ->
+    .map (shows) ->
       mapSeries shows, update
     .tap (results) ->
       results.filter(({sync, error}) -> not sync and not error).forEach(telegram.sendShowChange)
