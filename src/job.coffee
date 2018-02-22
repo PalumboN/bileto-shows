@@ -4,16 +4,18 @@ module.exports = (db) ->
   telegram = require('./models/telegram')
   {mapSeries} = Promise
 
+  findSection = ({sections}, {id, description, full_price}) ->
+    _.find(sections, { id }) || _.find(sections, { description, full_price })
 
   isSync = (section, tShow) ->
-    console.log "Buscando sección: " + section.description
-    tSection  = _.find tShow.sections, { id: section.id }
-    tSection.section_availability == section.section_availability
+    console.log "Buscando sección: " + section.description, section.id
+    tSection  = findSection(tShow, section)
+    tSection.section_availability == section?.section_availability
 
   sync = (section, tShow) ->
     console.log "Actualizando sección: " + section.description
-    tSection  = _.find tShow.sections, { id: section.id }
-    section.section_availability = tSection.section_availability
+    tSection  = findSection(tShow, section)
+    _.assign(section, tSection)
 
   save = (show) ->
     show.sections.forEach (it) -> it.timestamp = new Date()
@@ -29,8 +31,7 @@ module.exports = (db) ->
     .then (tShows) ->
       tShow = _.find tShows, { id: show.id }
       result.sync = _.every show.sections, (it) -> isSync it, tShow
-      if not result.sync
-        show.sections.forEach (it) -> sync it, tShow
+      show.sections.forEach (it) -> sync it, tShow
     .then -> result
     .catch (err) ->
       console.log {err}
@@ -43,8 +44,8 @@ module.exports = (db) ->
     .then (shows) ->
       mapSeries shows, update
     .tap (results) ->
-      results.filter((it) -> not it.sync).forEach(telegram.sendShowChange)
+      results.filter(({sync, error}) -> not sync and not error).forEach(telegram.sendShowChange)
     .tap (results) ->
-      mapSeries results, ({show}) -> save show
+      mapSeries(results.filter(({error}) -> not error), ({show}) -> save show)
 
   return { run }
