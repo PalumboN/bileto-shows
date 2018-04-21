@@ -6,8 +6,8 @@ const {mongo} = require('./src/config')
 mongoose
   .connect(mongo.uri, { useMongoClient: true })
   .then((db) => {
-    // require("./src/searcher")(db)
-    return require("./src/job")(db).run()
+    require("./src/searcher")(db)
+    // return require("./src/job")(db).run()
   })
-  .then(() => process.exit(0))
-  .catch((error) => {console.log(error); process.exit(-1)})
+  // .then(() => process.exit(0))
+  // .catch((error) => {console.log(error); process.exit(-1)})

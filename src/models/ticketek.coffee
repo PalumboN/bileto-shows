@@ -21,8 +21,15 @@ login = ->
 
 
 makeShowURI = (show) -> "#{baseUrl}/websource/show/#{show}/"
+session = null
 makeShowRequest = (show) ->
-  login().then (sessionid) ->
+  promise =
+    if session != null
+      Promise.resolve(session)
+    else
+      login().tap (sessionid) -> session = sessionid
+  promise
+  .then (sessionid) ->
     jar = request.jar()
     cookie = request.cookie("sessionid=#{sessionid}")
     url = makeShowURI show
@@ -31,7 +38,7 @@ makeShowRequest = (show) ->
     rp {url, jar}
 
 
-parseScript = (body) ->
+findScript = (body) ->
   scripts = _.split body, '<script type="text/javascript">'
   script = _.find scripts, (it) -> it.includes "json_context"
   script = _.split script, '</script>', 1
@@ -63,9 +70,10 @@ module.exports =
   getPerformances: (show) ->
     makeShowRequest show
     .then ({body}) =>
-      eval parseScript body
+      # return body
+      eval findScript body
       try
         json_context
       catch error
-        throw "'json_context' not found"
+        return Promise.resolve error: "#{show}: 'json_context' not found"
       toPerformances json_context, show

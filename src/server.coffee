@@ -7,6 +7,7 @@ module.exports = (db) ->
   config = require('./config')
   {Show} = require('./models/schemas')(db)
   ticketek = require('./models/ticketek')
+  searcher = require('./searcher')
 
   app = express()
   app.use(session({ secret: "tickets", resave: false, saveUninitialized: true }))
@@ -54,7 +55,11 @@ module.exports = (db) ->
   app.post '/jobs/run', (req, res) ->
     finish res, job(db).run()
 
-  app.get '/shows/:show', ({params}, res) ->
+
+  app.get '/shows/ticketek', ({params}, res) ->
+    finish res, searcher().map (show) -> ticketek.getPerformances show
+
+  app.get '/shows/ticketek/:show', ({params}, res) ->
     finish res, ticketek.getPerformances params.show
 
 
@@ -72,7 +77,7 @@ module.exports = (db) ->
 
   app.get '/', authMiddleware, (req, res) -> res.sendFile "#{path}/app.html"
 
-  app.get '/login', (req, res) => console.log "LOGIINN" ; res.sendFile "#{path}/login.html"
+  app.get '/login', (req, res) => res.sendFile "#{path}/login.html"
   app.post '/login',
     passport.authenticate('local',
       successRedirect: '/'
