@@ -35,36 +35,36 @@ module.exports = (db) ->
     .catch errorHandler res
 
 
-  ## JOBS
-  app.get '/jobs', authMiddleware, (req, res) ->
+  ## PING
+  app.get '/ping', (req, res) ->  res.send("pong")
+
+  ## API
+  app.get '/shows', authMiddleware, (req, res) ->
     finish res, Show.findOpen()
 
-  app.get '/jobs/archive', authMiddleware, (req, res) ->
+  app.get '/shows/archive', authMiddleware, (req, res) ->
     finish res, Show.findArchive()
 
-  app.post '/jobs', authMiddleware, ({body}, res) ->
+  app.post '/shows', authMiddleware, ({body}, res) ->
     finish res, Show.create body
 
-  app.delete '/jobs/:job', authMiddleware, ({params}, res) ->
+  app.delete '/shows/:job', authMiddleware, ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: true)
 
-  app.post '/jobs/reopen/:job', authMiddleware, ({params}, res) ->
+  app.post '/shows/reopen/:job', authMiddleware, ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: false)
 
-  ## SHOWS
-  app.post '/jobs/run', (req, res) ->
+
+  app.post '/shows/sync', (req, res) ->
     finish res, job(db).run()
 
 
-  app.get '/shows/ticketek', ({params}, res) ->
+  app.get '/sites/ticketek/shows', ({params}, res) ->
     finish res, searcher().map (show) -> ticketek.getPerformances show
 
-  app.get '/shows/ticketek/:show', ({params}, res) ->
+  app.get '/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, ticketek.getPerformances params.show
 
-
-  ## PING
-  app.get '/ping', (req, res) ->  res.send("pong")
 
 
   ## APP

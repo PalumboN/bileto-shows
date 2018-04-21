@@ -12,16 +12,22 @@ module.exports = (db) ->
     tSection  = findSection(tShow, section)
     tSection.section_availability == section?.section_availability
 
-  sync = (section, tShow) ->
+  update = (section, tShow) ->
     console.log "Actualizando sección: " + section.description
     tSection  = findSection(tShow, section)
     _.assign(section, tSection)
 
   save = (show) ->
+    console.log "Saving changes"
     show.sections.forEach (it) -> it.timestamp = new Date()
-    Show.update { _id: show._id }, show
+    show.save()
 
-  update = (show) ->
+  notFound = (show) ->
+    show.archive = true
+    show.save()
+    throw "Delete show: #{show.name}"
+
+  sync = (show) ->
     description = "#{show.name} - #{show.date}"
     console.log "Analizando: " + description
     result = {show}
@@ -30,21 +36,23 @@ module.exports = (db) ->
     .getPerformances show.name
     .then (tShows) ->
       tShow = _.find tShows, { id: show.id }
+      notFound show if _.isEmpty tShow
       result.sync = _.every show.sections, (it) -> isSync it, tShow
-      show.sections.forEach (it) -> sync it, tShow
+      show.sections.forEach (it) -> update it, tShow
     .then -> result
     .catch (err) ->
       console.log {err}
       result.error = err
       result
     .tap (result) ->
-      telegram.sendShowChange if not result.sync
+      telegram.sendShowChange result if not result.sync
     .tap ({show, error}) ->
+      console.log error
       save show if not error
 
   run = ->
     Show
     .findOpen()
-    .then (shows) -> mapSeries shows, update
+    .then (shows) -> mapSeries shows, sync
 
   return { run }

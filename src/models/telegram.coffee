@@ -21,7 +21,10 @@ sendMessage = (message) ->
       chat_id: chatId
       text: message
 
-  request.postAsync opts
+  request
+  .postAsync opts
+  .then (res) ->
+    console.log {res}
 
 
 sendShowChange = (result) ->
