@@ -60,4 +60,9 @@ class TicketekController extends Controller {
     .then(() => this.quering = false)
   }
 
+  follow(performance) {
+    performance.following = true
+    this.post(`sites/ticketek/shows/${performance.name}/follow`)
+    .then(() => performance.following = false)
+  }
 }
