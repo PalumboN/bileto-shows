@@ -65,6 +65,11 @@ module.exports = (db) ->
   app.get '/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, ticketek.getPerformances params.show
 
+  app.post '/sites/ticketek/shows/:show/import', ({params}, res) ->
+    finish res, ticketek.getPerformances(params.show).then (it) -> Show.newTicketek it
+
+
+
 
 
   ## APP

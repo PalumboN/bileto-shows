@@ -3,30 +3,28 @@ Schema = mongoose.Schema
 Mixed = Schema.Types.Mixed
 
 Show = new Schema
-  name:
-    type: String
+  model:
+    type: Mixed
     required: true
-  id:
-    type: Number
-    required: true
-  author: String
-  date: String
-  sections: [
-    id:
-      type: Number
-      required: true
-    description: String
-    section_availability: String
-    full_price: String
-    timestamp: Date
-  ]
   archive:
     type: Boolean
     required: true
     default: false
+  site:
+    type: String
+    required: true
+  lastUpdate:
+    type: Date
+    required: true
 
 Show.statics.findOpen = -> this.find archive: false
 Show.statics.findArchive = -> this.find archive: true
+Show.statics.newTicketek = (model) ->
+  this.create {
+    model
+    site: "ticketek"
+    lastUpdate: new Date()
+  }
 
 module.exports = (db) ->
   Show: db.model 'Show', Show
