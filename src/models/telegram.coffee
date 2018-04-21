@@ -5,9 +5,9 @@ sectionString = ({description, full_price, section_availability}) ->
   "#{description} - $#{full_price}: #{section_availability}"
 
 forHumans = ({show, sync, error}) ->
-  text = "#{show.name} - #{show.date}\n"
+  text = show.description + "\n"
   return text + error if error?
-  text + show.sections.map(sectionString).join('\n')
+  text
 
 
 sendMessage = (message) ->
@@ -23,8 +23,8 @@ sendMessage = (message) ->
 
   request
   .postAsync opts
-  .then (res) ->
-    console.log {res}
+  .then ({body}) ->
+    console.log {body}
 
 
 sendShowChange = (result) ->

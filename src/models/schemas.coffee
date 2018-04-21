@@ -26,5 +26,9 @@ Show.statics.newTicketek = (model) ->
     lastUpdate: new Date()
   }
 
+Show.virtual("name").get () -> this.model[0].name
+Show.virtual("date").get () -> this.model[0].date
+Show.virtual("description").get () -> this.name + " - " + this.date
+
 module.exports = (db) ->
   Show: db.model 'Show', Show

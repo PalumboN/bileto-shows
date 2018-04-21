@@ -3,7 +3,7 @@ module.exports = (db) ->
   session = require('express-session')
   passport = require('passport')
   bodyParser = require('body-parser')
-  job = require('./job')
+  syncer = require('./job')
   config = require('./config')
   {Show} = require('./models/schemas')(db)
   ticketek = require('./models/ticketek')
@@ -56,7 +56,7 @@ module.exports = (db) ->
 
 
   app.post '/shows/sync', (req, res) ->
-    finish res, job(db).run()
+    finish res, Show.findOpen().then syncer.run
 
 
   app.get '/sites/ticketek/shows', ({params}, res) ->
