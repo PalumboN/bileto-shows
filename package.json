@@ -14,6 +14,7 @@
     "bileto-shows": "file:src/app",
     "bluebird": "^3.5.1",
     "body-parser": "^1.17.2",
+    "cheerio": "^1.0.0-rc.2",
     "coffee-script": "^1.10.0",
     "crypto-js": "^3.1.5",
     "express": "^4.13.3",
