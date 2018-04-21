@@ -67,13 +67,14 @@ toPerformances = ({performances}, show) =>
 
 
 module.exports =
-  getPerformances: (show) ->
+class Ticketek
+  getPerformances: (show) =>
     makeShowRequest show
-    .then ({body}) =>
+    .then ({body, statusCode}) =>
       # return body
       eval findScript body
       try
         json_context
       catch error
-        return Promise.resolve error: "#{show}: 'json_context' not found"
+        return Promise.resolve error: "#{show}: 'json_context' not found - #{statusCode}"
       toPerformances json_context, show

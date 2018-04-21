@@ -1,4 +1,4 @@
-ticketek = require('./models/ticketek')
+Ticketek = require('./models/ticketek')
 telegram = require('./models/telegram')
 {mapSeries} = Promise
 
@@ -8,16 +8,14 @@ update = (show) ->
   show.save()
 
 notFound = (show) ->
-  show.archive = true
-  show.save()
-  throw "Delete show: #{show.name}"
+  throw "show_not_found: #{show.name}"
 
 sync = (show) ->
   console.log "Analizando: " + show.description
   result = {show}
 
-  ticketek
-  .getPerformances show.name
+  new Ticketek()
+  .getPerformances "show.name"
   .then (response) ->
     console.log {response}
     notFound show if response?.error?
@@ -28,8 +26,9 @@ sync = (show) ->
     console.log {err}
     result.error = err
     result
-  .tap (result) ->
-    telegram.sendShowChange result if not result.sync
+  .tap ({show, sync, error}) ->
+    return telegram.sendError error if error?
+    telegram.sendShowChange show if not sync
   .tap ({show, error}) ->
     update show if not error
 

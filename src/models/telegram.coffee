@@ -4,11 +4,7 @@ request = require('request')
 sectionString = ({description, full_price, section_availability}) ->
   "#{description} - $#{full_price}: #{section_availability}"
 
-forHumans = ({show, sync, error}) ->
-  text = show.description + "\n"
-  return text + error if error?
-  text
-
+forHumans = (show) -> show.description + "\n"
 
 sendMessage = (message) ->
   console.log "Enviando mensaje: " + message
@@ -24,11 +20,17 @@ sendMessage = (message) ->
   request
   .postAsync opts
   .then ({body}) ->
-    console.log {body}
+    console.log body
+    throw "telegram_error: #{body.description} - #{body.error_code}" if not body.ok
 
 
-sendShowChange = (result) ->
-  sendMessage "CAMBIÓ LA DISPONIBILIDAD DE\n" + forHumans result
+sendShowChange = (show) ->
+  sendMessage "CAMBIÓ LA DISPONIBILIDAD DE\n" + forHumans show
 
+sendError = (error) ->
+  sendMessage "ERROR\n" + error
 
-module.exports = { sendShowChange }
+module.exports = {
+  sendShowChange
+  sendError
+ }

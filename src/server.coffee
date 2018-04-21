@@ -6,7 +6,7 @@ module.exports = (db) ->
   syncer = require('./job')
   config = require('./config')
   {Show} = require('./models/schemas')(db)
-  ticketek = require('./models/ticketek')
+  Ticketek = require('./models/ticketek')
   searcher = require('./searcher')
 
   app = express()
@@ -63,10 +63,10 @@ module.exports = (db) ->
     finish res, searcher().map (show) -> ticketek.getPerformances show
 
   app.get '/sites/ticketek/shows/:show', ({params}, res) ->
-    finish res, ticketek.getPerformances params.show
+    finish res, new Ticketek().getPerformances params.show
 
   app.post '/sites/ticketek/shows/:show/import', ({params}, res) ->
-    finish res, ticketek.getPerformances(params.show).then (it) -> Show.newTicketek it
+    finish res, new Ticketek().getPerformances(params.show).then (it) -> Show.newTicketek it
 
 
 
