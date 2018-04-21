@@ -14,7 +14,7 @@ analizeShowLink = (link) =>
     analizeShow link if link != "/" and link.startsWith("/")
 
 analizeShow = (link, clazz = null) =>
-  return if _.includes visited, link
+  return Promise.resolve() if _.includes visited, link
   visited.push link
   console.log visited.length, "LINKS ANALIZADOS"
   inspectLinksIn(link, clazz)

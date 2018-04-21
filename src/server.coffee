@@ -39,30 +39,30 @@ module.exports = (db) ->
   app.get '/ping', (req, res) ->  res.send("pong")
 
   ## API
-  app.get '/shows', authMiddleware, (req, res) ->
+  app.get '/api/shows', (req, res) ->
     finish res, Show.findOpen()
 
-  app.get '/shows/archive', authMiddleware, (req, res) ->
+  app.get '/api/shows/archive', (req, res) ->
     finish res, Show.findArchive()
 
-  app.delete '/shows/:job', authMiddleware, ({params}, res) ->
+  app.delete '/api/shows/:job', ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: true)
 
-  app.post '/shows/reopen/:job', authMiddleware, ({params}, res) ->
+  app.post '/api/shows/reopen/:job', ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: false)
 
 
-  app.post '/shows/sync', (req, res) ->
+  app.post '/api/shows/sync', (req, res) ->
     finish res, Show.findOpen().then syncer.run
 
 
-  app.get '/sites/ticketek/shows', ({params}, res) ->
-    finish res, searcher().map (show) -> ticketek.getPerformances show
+  app.get '/api/sites/ticketek/shows', ({params}, res) ->
+    finish res, searcher().map (show) -> new Ticketek().getPerformances show
 
-  app.get '/sites/ticketek/shows/:show', ({params}, res) ->
+  app.get '/api/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, new Ticketek().getPerformances params.show
 
-  app.post '/sites/ticketek/shows/:show/follow', ({params}, res) ->
+  app.post '/api/sites/ticketek/shows/:show/follow', ({params}, res) ->
     finish res, new Ticketek().getPerformances(params.show).then (it) -> Show.newTicketek it
 
 
@@ -77,7 +77,7 @@ module.exports = (db) ->
   app.use express.static(path)
   app.set "appPath", path
 
-  app.get '/', authMiddleware, (req, res) -> res.sendFile "#{path}/app.html"
+  app.get '/', (req, res) -> res.sendFile "#{path}/app.html"
 
   app.get '/login', (req, res) => res.sendFile "#{path}/login.html"
   app.post '/login',

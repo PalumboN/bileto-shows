@@ -4,8 +4,8 @@
   "description": "API sobre info de shows",
   "scripts": {
     "preinstall": "npm install './src/app'",
-    "start": "node index.js",
-    "job": "node job.js",
+    "start": "nodemon index.js",
+    "job": "nodemon job.js",
     "test": ""
   },
   "author": "PalumboN",
@@ -30,5 +30,8 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sha256": "^0.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
   }
 }
