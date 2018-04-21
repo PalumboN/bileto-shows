@@ -1,9 +1,6 @@
 request = require('request')
 {telegram: {token, chatId}} = require('../config')
 
-sectionString = ({description, full_price, section_availability}) ->
-  "#{description} - $#{full_price}: #{section_availability}"
-
 forHumans = (show) -> show.description + "\n"
 
 sendMessage = (message) ->
@@ -20,12 +17,12 @@ sendMessage = (message) ->
   request
   .postAsync opts
   .then ({body}) ->
-    console.log body
+    # console.log body
     throw "telegram_error: #{body.description} - #{body.error_code}" if not body.ok
 
 
 sendShowChange = (show) ->
-  sendMessage "CAMBIÓ LA DISPONIBILIDAD DE\n" + forHumans show
+  sendMessage "HUBO UN CAMBIO EN\n" + forHumans show
 
 sendError = (error) ->
   sendMessage "ERROR\n" + error

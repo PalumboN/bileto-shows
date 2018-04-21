@@ -46,15 +46,15 @@ findScript = (body) ->
 
 toCategoryString = (category) => category.description + '($' + category.full_price + ') - ' + category.section_availability
 
-importantData = (performace, name) =>
-  prices = performace["price-types"]
+importantData = (performance, name) =>
+  prices = performance["price-types"]
   {
     name
-    id: performace.id
-    place: performace.venue
-    author: performace.who
-    date: performace.when
-    description: performace.desc
+    id: performance.id
+    place: performance.venue
+    author: performance.who
+    date: performance.when
+    description: performance.desc
     sections: prices[0]
       .price_categories
       .map (it) => _.pick it, "id", "description", "section_availability", "full_price"
@@ -70,11 +70,15 @@ module.exports =
 class Ticketek
   getPerformances: (show) =>
     makeShowRequest show
-    .then ({body, statusCode}) =>
+    .then ({body, statusCode}) ->
       # return body
       eval findScript body
       try
-        json_context
+        performances = toPerformances json_context, show
+        delete json_context
+        return performances
       catch error
-        return Promise.resolve error: "#{show}: 'json_context' not found - #{statusCode}"
-      toPerformances json_context, show
+        return Promise.resolve {
+          error: "#{show}: 'json_context' not found - #{statusCode}"
+          statusCode
+        }

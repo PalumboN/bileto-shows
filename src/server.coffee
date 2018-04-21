@@ -45,9 +45,6 @@ module.exports = (db) ->
   app.get '/shows/archive', authMiddleware, (req, res) ->
     finish res, Show.findArchive()
 
-  app.post '/shows', authMiddleware, ({body}, res) ->
-    finish res, Show.create body
-
   app.delete '/shows/:job', authMiddleware, ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: true)
 
@@ -65,7 +62,7 @@ module.exports = (db) ->
   app.get '/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, new Ticketek().getPerformances params.show
 
-  app.post '/sites/ticketek/shows/:show/import', ({params}, res) ->
+  app.post '/sites/ticketek/shows/:show/follow', ({params}, res) ->
     finish res, new Ticketek().getPerformances(params.show).then (it) -> Show.newTicketek it
 
 

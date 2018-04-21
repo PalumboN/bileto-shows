@@ -2,25 +2,31 @@ Ticketek = require('./models/ticketek')
 telegram = require('./models/telegram')
 {mapSeries} = Promise
 
+analiseError = ({show}, {error, statusCode}) ->
+  if statusCode == 404
+    show.archive = true
+    show.save()
+  throw error
+
 update = (show) ->
   console.log "Saving changes"
   show.lastUpdate = new Date()
   show.save()
 
-notFound = (show) ->
-  throw "show_not_found: #{show.name}"
+doSync = (result, response) ->
+  result.sync = _.isEqual response, result.show.toJSON().model
+  result.show.model = response
 
 sync = (show) ->
   console.log "Analizando: " + show.description
   result = {show}
 
   new Ticketek()
-  .getPerformances "show.name"
+  .getPerformances show.name
   .then (response) ->
     console.log {response}
-    notFound show if response?.error?
-    result.sync = _.isEqual response, show.toJSON().model
-    show.model = response
+    analiseError result, response if response?.error?
+    doSync result, response
   .then -> result
   .catch (err) ->
     console.log {err}
@@ -28,7 +34,7 @@ sync = (show) ->
     result
   .tap ({show, sync, error}) ->
     return telegram.sendError error if error?
-    telegram.sendShowChange show if not sync
+    return telegram.sendShowChange show if not sync
   .tap ({show, error}) ->
     update show if not error
 
