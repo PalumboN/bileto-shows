@@ -4,8 +4,9 @@
   "description": "API sobre info de shows",
   "scripts": {
     "preinstall": "npm install './src/app'",
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "job": "node job.js",
+    "dev": "nodemon index.js",
     "test": ""
   },
   "author": "PalumboN",
