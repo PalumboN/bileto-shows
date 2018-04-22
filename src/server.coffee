@@ -7,8 +7,8 @@ module.exports = (db) ->
   config = require('./config')
   {Show} = require('./models/schemas')(db)
   Ticketek = require('./models/ticketek')
-  tuentrada = require('./models/tuentrada')
-  searcher = require('./searcher')
+  ticketportal = require('./models/ticketportal')
+  {TicketekSearcher, TicketportalSearcher} = require('./models/searcher')
 
   app = express()
   app.use(session({ secret: "tickets", resave: false, saveUninitialized: true }))
@@ -56,9 +56,10 @@ module.exports = (db) ->
   app.post '/api/shows/sync', (req, res) ->
     finish res, Show.findOpen().then syncer.run
 
+
   # TICKETEK
   app.get '/api/sites/ticketek/shows', ({params}, res) ->
-    finish res, searcher().map (show) -> new Ticketek().getPerformances show
+    finish res, new TicketekSearcher().run().map (show) -> new Ticketek().getPerformances show
 
   app.get '/api/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, new Ticketek().getPerformances params.show
@@ -66,15 +67,15 @@ module.exports = (db) ->
   app.post '/api/sites/ticketek/shows/:show/follow', authMiddleware, ({params}, res) ->
     finish res, new Ticketek().getPerformances(params.show).then (it) -> Show.newTicketek it
 
-  # TUENTRADA
-  # app.get '/api/sites/ticketek/shows', ({params}, res) ->
-  #   finish res, searcher().map (show) -> new Ticketek().getPerformances show
+  # TICKETPORTAL
+  app.get '/api/sites/ticketportal/shows', ({params}, res) ->
+    finish res, new TicketportalSearcher().run().map (show) -> ticketportal.getPerformances show
 
-  app.get '/api/sites/tuentrada/shows/:show', ({params}, res) ->
-    finish res, tuentrada.getPerformances params.show
+  app.get '/api/sites/ticketportal/shows/:show', ({params}, res) ->
+    finish res, ticketportal.getPerformances params.show
 
-  app.post '/api/sites/tuentrada/shows/:show/follow', authMiddleware, ({params}, res) ->
-    finish res, tuentrada.getPerformances(params.show).then (it) -> Show.newTuentrada it
+  app.post '/api/sites/ticketportal/shows/:show/follow', authMiddleware, ({params}, res) ->
+    finish res, ticketportal.getPerformances(params.show).then (it) -> Show.newTicketportal it
 
 
 
