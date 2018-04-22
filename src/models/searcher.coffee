@@ -48,6 +48,7 @@ class TicketekSearcher extends Searcher
     .then (it) => @shows
 
 
+
 module.exports.TicketportalSearcher =
 class TicketportalSearcher extends Searcher
 

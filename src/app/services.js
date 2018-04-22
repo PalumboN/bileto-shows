@@ -15,6 +15,10 @@ class Api {
     return this.cachedGet("sites/ticketek/shows", force)
   }
 
+  getTicketportalShows(force) {
+    return this.cachedGet("sites/ticketportal/shows", force)
+  }
+
   cachedGet(path, force) {
     if (this[path] && !force)
       return Promise.resolve(this[path])

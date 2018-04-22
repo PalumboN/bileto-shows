@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="page-header">
+    <h1>
+      Ticket Portal
+    </h1>
+
+    <i class="fa fa-spinner fa-pulse fa-2x fa-fw" data-ng-show="ctrl.quering"></i>
+    <span class="sr-only" data-ng-show="ctrl.quering">Loading...</span>
+  </div>
+
+  <div class="panel panel-default" data-ng-repeat="show in ctrl.shows">
+    <div class="container-fluid panel-heading">
+      <h3 class="panel-title col col-md-4">{{show.name}} - {{show.description}}</h3>
+      <a href="" class="col col-md-8 text-right" data-ng-click="ctrl.follow(show)">Follow</a>
+      <i class="fa fa-spinner fa-pulse fa-2x fa-fw" data-ng-show="show.following"></i>
+      <span class="sr-only" data-ng-show="show.following">Loading...</span>
+    </div>
+    <div class="panel-body" data-ng-repeat="performance in show.performances">
+      <p>{{performance}}</p>
+    </div>
+  </div>
+
+</div>

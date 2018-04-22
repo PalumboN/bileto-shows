@@ -17,7 +17,13 @@ Show = new Schema
   lastUpdate:
     type: Date
     required: true
+,
+  toObject:
+    virtuals: true
+  toJSON:
+    virtuals: true
 
+    
 Show.statics.findOpen = -> this.find archive: false
 Show.statics.findArchive = -> this.find archive: true
 Show.statics.newTicketek = (model) ->
@@ -33,9 +39,14 @@ Show.statics.newTicketportal = (model) ->
     lastUpdate: new Date()
   }
 
-Show.virtual("name").get () -> this.model[0].name
-Show.virtual("date").get () -> this.model[0].date
-Show.virtual("description").get () -> this.name + " - " + this.date
+Show.virtual("date").get () -> this.model[0]?.date
+Show.virtual("author").get () -> this.model[0]?.author
+Show.virtual("place").get () -> this.model[0]?.place?.title
+Show.virtual("name").get () -> 
+  this.model.name ||
+  this.model[0].name
+Show.virtual("description").get () -> 
+  this.name + " - " + (this.model.description || this.author)
 
 module.exports = (db) ->
   Show: db.model 'Show', Show
