@@ -1,10 +1,17 @@
 Ticketek = require('./models/ticketek')
+ticketportal = require('./models/ticketportal')
 telegram = require('./models/telegram')
 {mapSeries} = Promise
+
+getApi = ({site}) ->
+  switch site
+    when 'ticketek' then new Ticketek()
+    when 'ticketportal' then ticketportal
 
 analiseError = ({show}, {error, statusCode}) ->
   if statusCode == 404
     show.archive = true
+    error += " SHOW ARCHIVADO"
     show.save()
   throw error
 
@@ -21,8 +28,8 @@ sync = (show) ->
   console.log "Analizando: " + show.description
   result = {show}
 
-  new Ticketek()
-  .getPerformances show.name
+  getApi show
+  .getPerformances show.id
   .then (response) ->
     console.log {response}
     analiseError result, response if response?.error?

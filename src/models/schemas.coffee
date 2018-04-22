@@ -42,6 +42,7 @@ Show.statics.newTicketportal = (model) ->
 Show.virtual("date").get () -> this.model[0]?.date
 Show.virtual("author").get () -> this.model[0]?.author
 Show.virtual("place").get () -> this.model[0]?.place?.title
+Show.virtual("id").get () -> this.model.id || this.name
 Show.virtual("name").get () -> 
   this.model.name ||
   this.model[0].name
