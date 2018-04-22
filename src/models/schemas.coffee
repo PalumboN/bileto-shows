@@ -13,6 +13,7 @@ Show = new Schema
   site:
     type: String
     required: true
+    enum: ["ticketek", "tuentrada"]
   lastUpdate:
     type: Date
     required: true
@@ -23,6 +24,12 @@ Show.statics.newTicketek = (model) ->
   this.create {
     model
     site: "ticketek"
+    lastUpdate: new Date()
+  }
+Show.statics.newTuentrada = (model) ->
+  this.create {
+    model
+    site: "tuentrada"
     lastUpdate: new Date()
   }
 

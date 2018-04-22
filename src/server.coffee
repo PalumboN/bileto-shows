@@ -7,6 +7,7 @@ module.exports = (db) ->
   config = require('./config')
   {Show} = require('./models/schemas')(db)
   Ticketek = require('./models/ticketek')
+  tuentrada = require('./models/tuentrada')
   searcher = require('./searcher')
 
   app = express()
@@ -55,7 +56,7 @@ module.exports = (db) ->
   app.post '/api/shows/sync', (req, res) ->
     finish res, Show.findOpen().then syncer.run
 
-
+  # TICKETEK
   app.get '/api/sites/ticketek/shows', ({params}, res) ->
     finish res, searcher().map (show) -> new Ticketek().getPerformances show
 
@@ -65,6 +66,15 @@ module.exports = (db) ->
   app.post '/api/sites/ticketek/shows/:show/follow', authMiddleware, ({params}, res) ->
     finish res, new Ticketek().getPerformances(params.show).then (it) -> Show.newTicketek it
 
+  # TUENTRADA
+  # app.get '/api/sites/ticketek/shows', ({params}, res) ->
+  #   finish res, searcher().map (show) -> new Ticketek().getPerformances show
+
+  app.get '/api/sites/tuentrada/shows/:show', ({params}, res) ->
+    finish res, tuentrada.getPerformances params.show
+
+  app.post '/api/sites/tuentrada/shows/:show/follow', authMiddleware, ({params}, res) ->
+    finish res, tuentrada.getPerformances(params.show).then (it) -> Show.newTuentrada it
 
 
 
