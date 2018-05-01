@@ -1,0 +1,7 @@
+<p>{{show.place}} - {{performance.date}}</p>
+<table class="table table-hover" data-ng-repeat="section in performance.sections">
+    <tr class="active">
+        <td class="col col-md-6">{{section.description}} (${{section.full_price}})</td>
+        <td class="col col-md-6 text-right"><strong>{{section.section_availability}}</strong></td>
+    </tr>
+</table>

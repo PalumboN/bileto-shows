@@ -16,18 +16,7 @@
       <span class="col col-md-7 text-right" am-time-ago="show.lastUpdate"></span>
       <a href="" class="col col-md-1 text-right" data-ng-click="ctrl.archive(show)"><i class="fa fa-trash fa-lg text-danger" aria-hidden="true"></i></a>
     </div>
-    <div ng-if="show.site == 'ticketek'" class="panel-body" data-ng-repeat="performance in show.model">
-      <p>{{show.place}} - {{performance.date}}</p>
-      <table class="table table-hover" data-ng-repeat="section in performance.sections">
-        <tr class="active">
-          <td class="col col-md-6">{{section.description}} (${{section.full_price}})</td>
-          <td class="col col-md-6 text-right"><strong>{{section.section_availability}}</strong></td>
-        </tr>
-      </table>
-    </div>
-    <div ng-if="show.site == 'ticketportal'" class="panel-body" data-ng-repeat="performance in show.model.performances">
-      <p>{{performance}}</p>
-    </div>
+      <div show-performance></div>
   </div>
 
 </div>
@@ -43,15 +32,7 @@
         <h3 class="panel-title col col-md-4">{{show.description}}</h3>
         <a href="" class="col col-md-8 text-right" data-ng-click="ctrl.reactive(show)">Reactivar</a>
       </div>
-      <div class="panel-body" data-ng-repeat="performance in show.model">
-        <p>{{performance.author}} - {{performance.date}}</p>
-        <table class="table table-hover" data-ng-repeat="section in performance.sections">
-          <tr class="active">
-            <td class="col col-md-6">{{section.description}} (${{section.full_price}})</td>
-            <td class="col col-md-6 text-right"><strong>{{section.section_availability}}</strong></td>
-          </tr>
-        </table>
-      </div>
+      <div show-performance></div>
     </div>
   </div>
 </div>

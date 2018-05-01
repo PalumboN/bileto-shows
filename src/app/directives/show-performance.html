@@ -1,0 +1,6 @@
+<div ng-if="show.site == 'ticketek'" class="panel-body" data-ng-repeat="performance in show.model">
+    <div ticketek-performance></div>
+</div>
+<div ng-if="show.site == 'ticketportal'" class="panel-body" data-ng-repeat="performance in show.model.performances">
+    <div ticketportal-performance></div>
+</div>
