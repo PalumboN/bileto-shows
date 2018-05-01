@@ -1,4 +1,5 @@
 Ticketek = require('./models/ticketek')
+tuentrada = require('./models/tuentrada')
 ticketportal = require('./models/ticketportal')
 telegram = require('./models/telegram')
 {mapSeries} = Promise
@@ -7,6 +8,7 @@ getApi = ({site}) ->
   switch site
     when 'ticketek' then new Ticketek()
     when 'ticketportal' then ticketportal
+    when 'tuentrada' then tuentrada
 
 analiseError = ({show}, {error, statusCode}) ->
   if statusCode == 404
