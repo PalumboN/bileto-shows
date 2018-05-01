@@ -1,4 +1,5 @@
-request = require('request')
+# request = require('request') 
+request = require('requestretry')
 cheerio = require('cheerio')
 
 class Searcher
@@ -24,8 +25,12 @@ class Searcher
       Promise.all ps
 
   inspectLinksIn: (resource, clazz = null) =>
+    url = @base + resource
+    headers = "User-Agent": ""
+    console.log "QUERING: " + url
     request
-    .getAsync(@base + resource)
+    .getAsync {url, headers}
+    .tap ({statusCode}) -> console.log statusCode
     .then(({body}) => cheerio.load(body))
     .then(($) => $('a', clazz).map((i, el) => $(el).attr("href")))
 
@@ -55,6 +60,20 @@ class TicketportalSearcher extends Searcher
   constructor: () -> super("http://www.ticketportal.com.ar")
   
   _isShowLink : (link) => _.includes link, "eventperformances"
+  _data : (link) => _.last _.compact _.split(link, "=")
+
+  run: () =>
+    @analizeShow("/")
+    .tap => console.log "*********FINISH*********"
+    .then (it) => @shows
+
+
+module.exports.TuentradaSearcher =
+class TuentradaSearcher extends Searcher
+
+  constructor: () -> super("https://www.tuentrada.com")
+  
+  _isShowLink : (link) => _.includes link, "article_id"
   _data : (link) => _.last _.compact _.split(link, "=")
 
   run: () =>

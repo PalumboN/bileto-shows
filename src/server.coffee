@@ -7,8 +7,9 @@ module.exports = (db) ->
   config = require('./config')
   {Show} = require('./models/schemas')(db)
   Ticketek = require('./models/ticketek')
+  tuentrada = require('./models/tuentrada')
   ticketportal = require('./models/ticketportal')
-  {TicketekSearcher, TicketportalSearcher} = require('./models/searcher')
+  {TicketekSearcher, TuentradaSearcher, TicketportalSearcher} = require('./models/searcher')
 
   app = express()
   app.use(session({ secret: "tickets", resave: false, saveUninitialized: true }))
@@ -76,6 +77,17 @@ module.exports = (db) ->
 
   app.post '/api/sites/ticketportal/shows/:show/follow', authMiddleware, ({params}, res) ->
     finish res, ticketportal.getPerformances(params.show).then (it) -> Show.newTicketportal it
+
+  # TUENTRADA
+  app.get '/api/sites/tuentrada/shows', ({params}, res) ->
+    finish res, new TuentradaSearcher().run().map (show) -> tuentrada.getPerformances show
+
+  app.get '/api/sites/tuentrada/shows/:show', ({params}, res) ->
+    finish res, tuentrada.getPerformances params.show
+
+  app.post '/api/sites/tuentrada/shows/:show/follow', authMiddleware, ({params}, res) ->
+    finish res, tuentrada.getPerformances(params.show).then (it) -> Show.newTuentrada it
+
 
 
 

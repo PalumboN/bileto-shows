@@ -13,7 +13,7 @@ Show = new Schema
   site:
     type: String
     required: true
-    enum: ["ticketek", "ticketportal"]
+    enum: ["ticketek", "ticketportal", "tuentrada"]
   lastUpdate:
     type: Date
     required: true
@@ -26,16 +26,13 @@ Show = new Schema
     
 Show.statics.findOpen = -> this.find archive: false
 Show.statics.findArchive = -> this.find archive: true
-Show.statics.newTicketek = (model) ->
+Show.statics.newTicketek = (model) -> this.newShow model, "ticketek"
+Show.statics.newTuentrada = (model) -> this.newShow model, "tuentrada"
+Show.statics.newTicketportal = (model) -> this.newShow model, "ticketportal"
+Show.statics.newShow = (model, site) ->
   this.create {
     model
-    site: "ticketek"
-    lastUpdate: new Date()
-  }
-Show.statics.newTicketportal = (model) ->
-  this.create {
-    model
-    site: "ticketportal"
+    site
     lastUpdate: new Date()
   }
 
