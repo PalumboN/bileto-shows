@@ -12,8 +12,8 @@
 
   <div class="panel panel-default" data-ng-repeat="show in ctrl.shows">
     <div class="container-fluid panel-heading">
-      <h3 class="panel-title col col-md-4">{{show.description}} </h3>
-      <span class="col col-md-7 text-right" am-time-ago="show.lastUpdate"></span>
+      <h3 class="panel-title col col-md-8">{{show.description}} </h3>
+      <span class="col col-md-3 text-right" am-time-ago="show.lastUpdate"></span>
       <a href="" class="col col-md-1 text-right" data-ng-click="ctrl.archive(show)"><i class="fa fa-trash fa-lg text-danger" aria-hidden="true"></i></a>
     </div>
       <div show-performance></div>
@@ -29,8 +29,8 @@
   <div class="collapse" id="collapseArchived">
     <div class="panel panel-default" data-ng-repeat="show in ctrl.archivedShows">
       <div class="container-fluid panel-heading">
-        <h3 class="panel-title col col-md-4">{{show.description}}</h3>
-        <a href="" class="col col-md-8 text-right" data-ng-click="ctrl.reactive(show)">Reactivar</a>
+        <h3 class="panel-title col col-md-8">{{show.description}}</h3>
+        <a href="" class="col col-md-4 text-right" data-ng-click="ctrl.reactive(show)">Reactivar</a>
       </div>
       <div show-performance></div>
     </div>

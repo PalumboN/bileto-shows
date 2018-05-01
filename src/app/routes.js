@@ -11,6 +11,11 @@ var routes = ($stateProvider, $urlRouterProvider) => {
       templateUrl: "partials/ticketek.html",
       controller: "TicketekController as ctrl"
     })
+    .state('tuentrada', {
+      url: "/tuentrada",
+      templateUrl: "partials/tuentrada.html",
+      controller: "TuentradaController as ctrl"
+    })
     .state('ticketportal', {
       url: "/ticketportal",
       templateUrl: "partials/ticketportal.html",

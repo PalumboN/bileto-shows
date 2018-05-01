@@ -86,3 +86,23 @@ class TicketportalController extends Controller {
     .then(() => performance.following = false)
   }
 }
+
+class TuentradaController extends Controller {
+  constructor(Api) {
+    super(Api)
+    this.loadShows()
+  }
+
+  loadShows() {
+    this.quering = true
+    this.api.getTuentradaShows()
+    .then((it) => { this.shows = it })
+    .then(() => this.quering = false)
+  }
+
+  follow(performance) {
+    performance.following = true
+    this.post(`sites/tuentrada/shows/${performance.id}/follow`)
+    .then(() => performance.following = false)
+  }
+}

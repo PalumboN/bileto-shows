@@ -15,9 +15,14 @@ class Api {
     return this.cachedGet("sites/ticketek/shows", force)
   }
 
+  getTuentradaShows(force) {
+    return this.cachedGet("sites/tuentrada/shows", force)
+  }
+
   getTicketportalShows(force) {
     return this.cachedGet("sites/ticketportal/shows", force)
   }
+
 
   cachedGet(path, force) {
     if (this[path] && !force)
