@@ -1,4 +1,5 @@
-request = require('request')
+# request = require('request') 
+request = require('requestretry')
 {ticketek} = require('../config')
 rp = Promise.promisify request
 

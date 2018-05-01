@@ -1,4 +1,5 @@
-request = require('request')
+# request = require('request') 
+request = require('requestretry')
 
 baseUrl = "https://www.tuentrada.com/Online/default.asp?BOparam::WScontent::loadArticle::article_id="
 
@@ -29,7 +30,7 @@ getPerformances = (id) ->
     .map importantProperties
     .map (it) -> it.id = id; it
     # .tap (it) -> console.log it
+    .catch (error) -> [error: "#{url}: 'articleContext' not found - #{error}"]
 
 module.exports = { getPerformances }
-
 

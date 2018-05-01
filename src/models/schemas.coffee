@@ -44,7 +44,7 @@ Show.virtual("name").get () ->
   this.model.name ||
   this.model[0]?.name
 Show.virtual("description").get () -> 
-  this.name + " - " + (this.model.description || this.author)
+  this.name + " - " + (this.model.description || this.author || "")
 
 module.exports = (db) ->
   Show: db.model 'Show', Show

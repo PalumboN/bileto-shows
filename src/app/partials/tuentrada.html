@@ -10,6 +10,7 @@
   
   <div class="panel panel-default" data-ng-repeat="performances in ctrl.shows">
     <div class="container-fluid panel-heading">
+      
       <h3 class="panel-title col col-md-4">{{performances[0].name}} - {{performances[0].place.title}}</h3>
       <a href="" class="col col-md-8 text-right" data-ng-click="ctrl.follow(performances[0])">Follow</a>
       <i class="fa fa-spinner fa-pulse fa-2x fa-fw" data-ng-show="performances[0].following"></i>

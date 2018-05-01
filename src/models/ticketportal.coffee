@@ -1,4 +1,5 @@
-request = require('request')
+# request = require('request') 
+request = require('requestretry')
 cheerio = require('cheerio')
 
 baseUrl = "http://lunapark.ticketportal.com.ar/eventperformances.asp?p="

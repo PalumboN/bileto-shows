@@ -3,18 +3,19 @@ request = require('requestretry')
 cheerio = require('cheerio')
 
 class Searcher
-  shows: []
-  visited: []
-
   constructor: (@base) ->
+    @shows = []
+    @visited = []
 
   normalize: (link) => if link.startsWith("/") then link else "/" + link
+
+  shouldAnalize: (link) => link.startsWith("/") or link.startsWith(@base)
 
   analizeShowLink: (link) =>
     if @_isShowLink link
       @shows.push @_data link
     else
-      @analizeShow @normalize(link) 
+      @analizeShow @normalize(link) if @shouldAnalize link
 
   analizeShow: (link, clazz = null) =>
     return Promise.resolve() if _.includes @visited, link
@@ -27,12 +28,12 @@ class Searcher
       Promise.all ps
 
   inspectLinksIn: (resource, clazz = null) =>
-    url = @base + resource
+    url = if resource.startsWith(@base) then resource else @base + resource
     headers = "User-Agent": ""
     console.log "QUERING: " + url
     request
     .getAsync {url, headers}
-    .tap ({statusCode}) -> console.log statusCode
+    # .tap ({statusCode}) -> console.log statusCode
     .then(({body}) => cheerio.load(body))
     .then(($) => $('a', clazz).map((i, el) => $(el).attr("href")))
 
@@ -53,7 +54,6 @@ class TicketekSearcher extends Searcher
     @analizeShow("/buscar", ".artists-list-item")
     .tap => console.log "*********FINISH*********"
     .then (it) => @shows
-
 
 
 module.exports.TicketportalSearcher =
