@@ -73,8 +73,8 @@ class Ticketek
     makeShowRequest show
     .then ({body, statusCode}) ->
       # return body
-      eval findScript body
       try
+        eval findScript body
         performances = toPerformances json_context, show
         delete json_context
         return performances
