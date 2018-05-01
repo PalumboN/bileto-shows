@@ -45,7 +45,7 @@ Show.virtual("place").get () -> this.model[0]?.place?.title
 Show.virtual("id").get () -> this.model.id || this.name
 Show.virtual("name").get () -> 
   this.model.name ||
-  this.model[0].name
+  this.model[0]?.name
 Show.virtual("description").get () -> 
   this.name + " - " + (this.model.description || this.author)
 
