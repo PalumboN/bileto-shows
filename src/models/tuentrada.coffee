@@ -10,7 +10,7 @@ findScript = (body) ->
   script = _.split script, '</script>', 1
   script[0]
 
-getDataFromContext = ({searchNames, searchResults}) -> searchResults.map (it) -> _.zipObject searchNames, it
+getDataFromContext = ({searchNames, searchResults}) -> searchResults?.map (it) -> _.zipObject searchNames, it
 
 importantProperties =  (performance) -> _.pick performance, "name", "short_description", "start_date", "availability_status", "availability_num", "min_price"
 
@@ -20,12 +20,14 @@ getPerformances = (id) ->
     console.log "QUERING: " + url
     request
     .getAsync {url, headers}
+    # .tap ({statusCode}) -> console.log statusCode
     .then ({body}) -> body
     .then findScript
     .then (context) ->
         try eval context # TODO: Mejorar parseo y control de errores
         getDataFromContext articleContext
     .map importantProperties
+    .map (it) -> it.id = id; it
     # .tap (it) -> console.log it
 
 module.exports = { getPerformances }

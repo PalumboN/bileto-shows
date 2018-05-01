@@ -8,11 +8,13 @@ class Searcher
 
   constructor: (@base) ->
 
+  normalize: (link) => if link.startsWith("/") then link else "/" + link
+
   analizeShowLink: (link) =>
     if @_isShowLink link
       @shows.push @_data link
     else
-      @analizeShow link if link != "/" and link.startsWith("/")
+      @analizeShow @normalize(link) 
 
   analizeShow: (link, clazz = null) =>
     return Promise.resolve() if _.includes @visited, link
@@ -71,7 +73,7 @@ class TicketportalSearcher extends Searcher
 module.exports.TuentradaSearcher =
 class TuentradaSearcher extends Searcher
 
-  constructor: () -> super("https://www.tuentrada.com")
+  constructor: () -> super("https://www.tuentrada.com/Online")
   
   _isShowLink : (link) => _.includes link, "article_id"
   _data : (link) => _.last _.compact _.split(link, "=")
