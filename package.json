@@ -21,7 +21,6 @@
     "express-session": "^1.15.6",
     "hmacsha1": "^1.0.0",
     "http": "0.0.0",
-    "http-delayed-response": "0.0.4",
     "lodash": "^4.17.4",
     "moment": "^2.10.6",
     "mongoose": "^4.5.2",

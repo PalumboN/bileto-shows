@@ -3,7 +3,6 @@ module.exports = (db) ->
   session = require('express-session')
   passport = require('passport')
   bodyParser = require('body-parser')
-  DelayedResponse = require('http-delayed-response')
   syncer = require('./job')
   config = require('./config')
   {Show} = require('./models/schemas')(db)
@@ -60,11 +59,8 @@ module.exports = (db) ->
 
 
   # TICKETEK
-  app.get '/api/sites/ticketek/shows', (req, res) ->
-    delayed = new DelayedResponse(req, res)
-    delayed.wait()
-    promise = new TicketekSearcher().run().map (show) -> new Ticketek().getPerformances show
-    delayed.end(promise)
+  app.get '/api/sites/ticketek/shows', ({params}, res) ->
+    finish res, new TicketekSearcher().run().map (show) -> new Ticketek().getPerformances show
 
   app.get '/api/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, new Ticketek().getPerformances params.show
@@ -115,7 +111,5 @@ module.exports = (db) ->
     )
 
   port = config.port
-  server = app.listen port, ->
+  app.listen port, ->
     console.log "Listen port #{port}"
-
-  server.timeout = 10 * 60 * 1000
