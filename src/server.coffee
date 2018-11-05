@@ -115,5 +115,7 @@ module.exports = (db) ->
     )
 
   port = config.port
-  app.listen port, ->
+  server = app.listen port, ->
     console.log "Listen port #{port}"
+
+  server.timeout = 10 * 60 * 1000
