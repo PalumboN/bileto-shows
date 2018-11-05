@@ -60,7 +60,15 @@ module.exports = (db) ->
 
   # TICKETEK
   app.get '/api/sites/ticketek/shows', ({params}, res) ->
-    finish res, new TicketekSearcher().run().map (show) -> new Ticketek().getPerformances show
+    res.write "["
+    cb = (link) -> 
+      new Ticketek()
+      .getPerformances(link)
+      .then (show) -> res.write Buffer.from(JSON.stringify(show) + ",")
+
+    new TicketekSearcher()
+    .run(cb)
+    .then -> res.end("null]")
 
   app.get '/api/sites/ticketek/shows/:show', ({params}, res) ->
     finish res, new Ticketek().getPerformances params.show
@@ -70,7 +78,15 @@ module.exports = (db) ->
 
   # TICKETPORTAL
   app.get '/api/sites/ticketportal/shows', ({params}, res) ->
-    finish res, new TicketportalSearcher().run().map (show) -> ticketportal.getPerformances show
+    res.write "["
+    cb = (link) -> 
+      ticketportal
+      .getPerformances(link)
+      .then (show) -> res.write Buffer.from(JSON.stringify(show) + ",")
+
+    new TicketportalSearcher()
+    .run(cb)
+    .then -> res.end("null]")
 
   app.get '/api/sites/ticketportal/shows/:show', ({params}, res) ->
     finish res, ticketportal.getPerformances params.show
@@ -80,7 +96,15 @@ module.exports = (db) ->
 
   # TUENTRADA
   app.get '/api/sites/tuentrada/shows', ({params}, res) ->
-    finish res, new TuentradaSearcher().run().map (show) -> tuentrada.getPerformances show
+    res.write "["
+    cb = (link) -> 
+      tuentrada
+      .getPerformances(link)
+      .then (show) -> res.write Buffer.from(JSON.stringify(show) + ",")
+
+    new TuentradaSearcher()
+    .run(cb)
+    .then -> res.end("null]")
 
   app.get '/api/sites/tuentrada/shows/:show', ({params}, res) ->
     finish res, tuentrada.getPerformances params.show
