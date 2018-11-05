@@ -37,10 +37,16 @@ class Searcher
     .then(({body}) => cheerio.load(body))
     .then(($) => $('a', clazz).map((i, el) => $(el).attr("href")))
 
+
+  run: () =>
+    @_start()
+    .tap => console.log "*********FINISH*********"
+    .then (it) => @shows
+
   _isShowLink : (link) => throw "Implement abstract method"
   _data : (link) => throw "Implement abstract method"
 
-
+  _start: () => @analizeShow("/")
 
 module.exports.TicketekSearcher =
 class TicketekSearcher extends Searcher
@@ -50,11 +56,7 @@ class TicketekSearcher extends Searcher
   _isShowLink : (link) => _.includes link, "websource/show"
   _data : (link) => _.last _.compact _.split(link, "/")
 
-  run: () =>
-    @analizeShow("/buscar", ".artists-list-item")
-    .tap => console.log "*********FINISH*********"
-    .then (it) => @shows
-
+  _start: () => @analizeShow("/buscar", ".artists-list-item")
 
 module.exports.TicketportalSearcher =
 class TicketportalSearcher extends Searcher
@@ -64,10 +66,6 @@ class TicketportalSearcher extends Searcher
   _isShowLink : (link) => _.includes link, "eventperformances"
   _data : (link) => _.last _.compact _.split(link, "=")
 
-  run: () =>
-    @analizeShow("/")
-    .tap => console.log "*********FINISH*********"
-    .then (it) => @shows
 
 
 module.exports.TuentradaSearcher =
@@ -77,8 +75,3 @@ class TuentradaSearcher extends Searcher
   
   _isShowLink : (link) => _.includes link, "article_id"
   _data : (link) => _.last _.compact _.split(link, "=")
-
-  run: () =>
-    @analizeShow("/")
-    .tap => console.log "*********FINISH*********"
-    .then (it) => @shows
