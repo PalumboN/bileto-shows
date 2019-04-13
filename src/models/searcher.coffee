@@ -55,6 +55,8 @@ class TicketekSearcher extends Searcher
 
   constructor: () -> super("https://www.ticketek.com.ar")
 
+  shouldAnalize: (link) => !link.includes("mobile") && super(link)
+
   _isShowLink : (link) => _.includes link, "websource/show"
   _data : (link) => _.last _.compact _.split(link, "/")
 

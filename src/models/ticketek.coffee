@@ -62,7 +62,7 @@ importantData = (performance, name) =>
   }
 
 toPerformances = ({performances}, show) =>
-  Object.values performances
+  _.values performances
   .filter (it) => it != undefined
   .map (it) => importantData it, show
 
