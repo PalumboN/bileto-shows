@@ -1,7 +1,7 @@
 request = require('request')
 {telegram: {token, chatId}} = require('../config')
 
-forHumans = (show) -> show.description + "\n"
+forHumans = (show) -> show.name + " - " + show.date + "\n" + show.alert
 
 sendMessage = (message) ->
   console.log "Enviando mensaje: " + message
@@ -22,7 +22,7 @@ sendMessage = (message) ->
 
 
 sendShowChange = (show) ->
-  sendMessage "HUBO UN CAMBIO EN\n" + forHumans show
+  sendMessage forHumans(show)
 
 sendError = (error) ->
   sendMessage "ERROR\n" + error
@@ -30,4 +30,5 @@ sendError = (error) ->
 module.exports = {
   sendShowChange
   sendError
+  forHumans
  }
