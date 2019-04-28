@@ -7,7 +7,7 @@
     "start": "node index.js",
     "job": "node job.js",
     "dev": "nodemon index.js",
-    "test": ""
+    "test": "mocha --compilers coffee:coffee-script/register --require ./test/config.coffee --recursive --exit"
   },
   "author": "PalumboN",
   "dependencies": {
@@ -35,6 +35,11 @@
     "sha256": "^0.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "should": "^13.2.1",
+    "should-sinon": "0.0.6",
+    "sinon": "^5.0.10"
   }
 }

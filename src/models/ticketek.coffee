@@ -34,8 +34,8 @@ makeShowRequest = (show) ->
     jar = request.jar()
     cookie = request.cookie("sessionid=#{sessionid}")
     url = makeShowURI show
-    console.log url
     jar.setCookie(cookie, url)
+    console.log "QUERING: " + url
     rp {url, jar}
 
 
