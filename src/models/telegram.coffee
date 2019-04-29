@@ -22,7 +22,7 @@ sendMessage = (message) ->
 
 
 sendShowChange = (show) ->
-  sendMessage forHumans(show)
+  sendMessage forHumans(show) if show.shouldAlert
 
 sendError = (error) ->
   sendMessage "ERROR\n" + error

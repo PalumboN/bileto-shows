@@ -46,8 +46,12 @@ Show.virtual("name").get () ->
 Show.virtual("description").get () -> 
   this.name + " - " + (this.model.description || this.author || "")
 
-Show.virtual("alert").get () -> 
-  this.strategy.alert(this.model)
+Show.virtual("shouldAlert").get () -> 
+  if (this.strategy.shouldAlert?)
+    this.strategy.shouldAlert(this.model)
+  else
+    true
+Show.virtual("alert").get () -> this.strategy.alert(this.model)
 
 
 
@@ -62,14 +66,18 @@ Show.virtual("strategy").get () ->
 class TicketekShow
   alert: (model) =>
     _.flatMap(model, "sections")
-    .map(({description, section_availability}) -> "#{description} - #{section_availability}")
-    .join("\n")
+    .map ({description, section_availability}) -> "#{description} - #{section_availability}"
+    .join "\n"
 
 class TuentradaShow
+  shouldAlert: (model) =>
+    model
+    .some ({availability_num}) -> Number.parseInt(availability_num) < 50
+
   alert: (model) =>
     model
-    .map(({availability_num}) -> "Quedan #{availability_num} entradas disponibles")
-    .join("\n")
+    .map ({availability_num}) -> "Quedan #{availability_num} entradas disponibles"
+    .join "\n"
 
 
 

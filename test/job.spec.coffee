@@ -69,10 +69,18 @@ describe 'Telegram', ->
 
   describe 'Telegram', -> 
 
-    it 'should send messages for humans from Ticketek', ->
+    it 'transform alerts for humans from Ticketek', ->
       telegram.forHumans ticketekShow
       .should.be.eql "KANKA19NIC - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 - AVAILABLE"
     
-    it 'should send messages for humans from Tu Entrada', ->
+    it 'transform alerts for humans from Tu Entrada', ->
       telegram.forHumans tuentradaShow
       .should.be.eql "PL - Anfiteatro Municipal, Rosario - Andres Calamaro - 30Nov - sábado 30 de nov 2019 22:00 hs\nQuedan 809 entradas disponibles"
+
+    it 'should alert for Ticketek', ->
+      ticketekShow.shouldAlert
+      .should.be.true
+    
+    it 'should alert for Tu Entrada', ->
+      tuentradaShow.shouldAlert
+      .should.be.false
