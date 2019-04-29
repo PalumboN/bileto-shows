@@ -70,7 +70,6 @@ describe 'Telegram', ->
   describe 'Telegram', -> 
 
     it 'should send messages for humans from Ticketek', ->
-      console.log ticketekShow.alert
       telegram.forHumans ticketekShow
       .should.be.eql "KANKA19NIC - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 - AVAILABLE"
     

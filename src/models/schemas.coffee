@@ -47,9 +47,31 @@ Show.virtual("description").get () ->
   this.name + " - " + (this.model.description || this.author || "")
 
 Show.virtual("alert").get () -> 
+  this.strategy.alert(this.model)
+
+
+
+
+Show.virtual("strategy").get () -> 
   switch this.site
-    when "ticketek" then this.model[0].sections.map(({description, section_availability}) -> "#{description} - #{section_availability}").join("\n")
-    when "tuentrada" then "Quedan #{this.model[0].availability_num} entradas disponibles"
+    when "ticketek" then new TicketekShow()
+    when "tuentrada" then new TuentradaShow()
+
+
+
+class TicketekShow
+  alert: (model) =>
+    _.flatMap(model, "sections")
+    .map(({description, section_availability}) -> "#{description} - #{section_availability}")
+    .join("\n")
+
+class TuentradaShow
+  alert: (model) =>
+    model
+    .map(({availability_num}) -> "Quedan #{availability_num} entradas disponibles")
+    .join("\n")
+
+
 
 
 module.exports = (db) ->
