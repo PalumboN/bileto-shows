@@ -41,7 +41,8 @@ ticketekJson = [
         "section_availability":"AVAILABLE",
         "full_price":"700.00"
       }
-    ] 
+    ],
+    archive: true
   }
 ]
 
@@ -52,7 +53,8 @@ tuentradaJson = [ {
   availability_status: 'L',
   availability_num: '809',
   min_price: '$2.500,00',
-  id: '07F2362F-7825-4F28-88E2-F63DEDB44D2D' 
+  id: '07F2362F-7825-4F28-88E2-F63DEDB44D2D',
+  archive: true
 }]
 
 
