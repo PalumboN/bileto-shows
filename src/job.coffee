@@ -23,6 +23,7 @@ update = (show) ->
   show.save()
 
 doSync = (result, response) ->
+  console.log "SYNCING"
   result.sync = _.isEqual response, result.show.toJSON().model
   result.show.model = response
 
@@ -33,8 +34,8 @@ sync = (show) ->
   getApi show
   .getPerformances show.id
   .then (response) ->
-    console.log {response}
-    analiseError result, response if response?.error?
+    console.log "Before SYNC", {response}
+    analiseError result, response[0] if response?[0]?.error?
     doSync result, response
   .then -> result
   .catch (err) ->
