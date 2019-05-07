@@ -46,12 +46,9 @@ Show.virtual("name").get () ->
 Show.virtual("description").get () -> 
   this.name + " - " + (this.model.description || this.author || "")
 
-Show.virtual("shouldAlert").get () -> 
-  if (this.strategy.shouldAlert?)
-    this.strategy.shouldAlert(this.model)
-  else
-    true
-Show.virtual("alert").get () -> this.strategy.alert(this.model)
+Show.virtual("shouldAlert").get () -> this.alerts != ""
+
+Show.virtual("alerts").get () -> this.strategy.alerts(this.model)
 
 
 
@@ -64,19 +61,21 @@ Show.virtual("strategy").get () ->
 
 
 class TicketekShow
-  alert: (model) =>
+  alerts: (model) =>
+    model[0].name + " - " + model[0].date + "\n" +
     _.flatMap(model, "sections")
     .map ({description, section_availability}) -> "#{description} - #{section_availability}"
     .join "\n"
 
 class TuentradaShow
-  shouldAlert: (model) =>
-    model
-    .some ({availability_num}) -> Number.parseInt(availability_num) < 50
+  shouldAlert: (availability_num) -> Number.parseInt(availability_num) < 50
+  shouldPause: (availability_num) -> Number.parseInt(availability_num) < 10
 
-  alert: (model) =>
+  alerts: (model) =>
     model
-    .map ({availability_num}) -> "Quedan #{availability_num} entradas disponibles"
+    .filter (show) => this.shouldAlert(show.availability_num)
+    .map ({name, availability_num}) => 
+      "#{name} - Quedan #{availability_num} entradas disponibles #{if (this.shouldPause availability_num) then '- ¡PAUSAR EVENTO!' else ''}"
     .join "\n"
 
 

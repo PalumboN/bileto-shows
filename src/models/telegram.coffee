@@ -1,7 +1,7 @@
 request = require('request')
 {telegram: {token, chatId}} = require('../config')
 
-forHumans = (show) -> show.name + " - " + show.date + "\n" + show.alert
+forHumans = (show) -> show.alerts
 
 sendMessage = (message) ->
   console.log "Enviando mensaje: " + message

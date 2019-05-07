@@ -47,14 +47,29 @@ ticketekJson = [
 ]
 
 tuentradaJson = [ { 
-  name: 'PL - Anfiteatro Municipal, Rosario - Andres Calamaro - 30Nov',
-  short_description: 'Andres Calamaro',
-  start_date: 'sábado 30 de nov 2019 22:00 hs',
-  availability_status: 'L',
-  availability_num: '809',
-  min_price: '$2.500,00',
-  id: '07F2362F-7825-4F28-88E2-F63DEDB44D2D',
-  archive: true
+  availability_num: "100"
+  availability_status: "S"
+  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012C"
+  min_price: "$950,00"
+  name: "El Teatro Flores - Divididos - 20Jun2019"
+  short_description: "Divididos"
+  start_date: "jueves 20 de jun 2019 21:00 hs"
+}, {
+  availability_num: "30"
+  availability_status: "S"
+  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012C"
+  min_price: "$950,00"
+  name: "El Teatro Flores - Divididos - 21Jun2019"
+  short_description: "Divididos"
+  start_date: "viernes 21 de jun 2019 21:00 hs"
+}, {
+  availability_num: "5"
+  availability_status: "S"
+  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012C"
+  min_price: "$950,00"
+  name: "El Teatro Flores - Divididos - 22Jun2019"
+  short_description: "Divididos"
+  start_date: "viernes 22 de jun 2019 21:00 hs"
 }]
 
 
@@ -77,7 +92,7 @@ describe 'Telegram', ->
     
     it 'transform alerts for humans from Tu Entrada', ->
       telegram.forHumans tuentradaShow
-      .should.be.eql "PL - Anfiteatro Municipal, Rosario - Andres Calamaro - 30Nov - sábado 30 de nov 2019 22:00 hs\nQuedan 809 entradas disponibles"
+      .should.be.eql "El Teatro Flores - Divididos - 21Jun2019 - Quedan 30 entradas disponibles \nEl Teatro Flores - Divididos - 22Jun2019 - Quedan 5 entradas disponibles - ¡PAUSAR EVENTO!"
 
     it 'should alert for Ticketek', ->
       ticketekShow.shouldAlert
@@ -85,4 +100,4 @@ describe 'Telegram', ->
     
     it 'should alert for Tu Entrada', ->
       tuentradaShow.shouldAlert
-      .should.be.false
+      .should.be.true
