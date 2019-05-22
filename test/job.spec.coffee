@@ -6,7 +6,7 @@ tuentrada = require('../src/models/tuentrada')
 
 ticketek = new Ticketek()
   
-xdescribe 'Shows', -> 
+xdescribe 'GET shows', -> 
   
 	it 'Ticketek should get performances', ->
     ticketek.getPerformances 'KANKA19NIC'
@@ -49,7 +49,7 @@ ticketekJson = [
 tuentradaJson = [ { 
   availability_num: "100"
   availability_status: "S"
-  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012C"
+  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012A"
   min_price: "$950,00"
   name: "El Teatro Flores - Divididos - 20Jun2019"
   short_description: "Divididos"
@@ -57,7 +57,7 @@ tuentradaJson = [ {
 }, {
   availability_num: "30"
   availability_status: "S"
-  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012C"
+  id: "44AB5CE3-3A7D-41D2-9145-26FA51B8012B"
   min_price: "$950,00"
   name: "El Teatro Flores - Divididos - 21Jun2019"
   short_description: "Divididos"
@@ -73,7 +73,7 @@ tuentradaJson = [ {
 }]
 
 
-describe 'Telegram', -> 
+describe 'Model', -> 
 
   before ->
     this.timeout 5000
@@ -83,6 +83,52 @@ describe 'Telegram', ->
       { Show } = require("../src/models/schemas")(db)
       Show.newTicketek(ticketekJson).then (show) -> ticketekShow = show
       Show.newTuentrada(tuentradaJson).then (show) -> tuentradaShow = show
+
+  describe 'Ticketek', ->
+
+    it 'trasform to tickets', ->
+      ticketekShow.tikets
+      .should.be.eql [
+        {
+          id: '31750723313'
+          name: 'KANKA19NIC - EL KANKA'
+          date: 'Martes 4/6  Pta 20:30Hs'
+          section: 'GRAL PTA 20:30'
+          price: '700.00'
+          availability: 'AVAILABLE'
+        }
+      ]
+
+  describe 'TuEntrada', ->
+
+    it 'trasform to tickets', ->
+      tuentradaShow.tikets
+      .should.be.eql [
+        {
+          id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012A'
+          name: 'El Teatro Flores - Divididos - 20Jun2019'
+          date: 'jueves 20 de jun 2019 21:00 hs'
+          section: 'UNICA'
+          price: '$950,00'
+          availability: '100'
+        },
+        {
+          id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012B'
+          name: 'El Teatro Flores - Divididos - 21Jun2019'
+          date: 'jueves 21 de jun 2019 21:00 hs'
+          section: 'UNICA'
+          price: '$950,00'
+          availability: '30'
+        },
+        {
+          id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012C'
+          name: 'El Teatro Flores - Divididos - 22Jun2019'
+          date: 'jueves 22 de jun 2019 21:00 hs'
+          section: 'UNICA'
+          price: '$950,00'
+          availability: '5'
+        }
+      ]
 
   describe 'Telegram', -> 
 
