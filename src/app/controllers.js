@@ -7,6 +7,10 @@ class Controller {
     return this.api.post(path, body)
   }
 
+  put(path, body) {
+    return this.api.put(path, body)
+  }
+  
   delete(path) {
     return this.api.delete(path)
   }
@@ -20,6 +24,14 @@ class ShowsController extends Controller {
 
   loadShows(force) {
     this.api.getShows(force)
+    .then((it) => {
+      it.forEach((show) =>
+        show.tickets.forEach((ticket) => 
+          ticket.alert = show.alertIds && show.alertIds.includes(ticket.id)
+        )
+      )
+      return it
+    })
     .then((it) => { this.shows = it })
   }
 
@@ -44,6 +56,12 @@ class ShowsController extends Controller {
     this.post(`shows/reopen/${show._id}`)
     .then(() => this.loadShows(true))
     .then(() => this.loadArchived(true))
+  }
+
+  changeAlerts(show) {
+    show.alertIds = show.tickets.filter((it) => it.alert).map((it) => it.id)
+    this.put(`shows/${show._id}`, show)
+    .then(() => this.loadShows(true))  
   }
 }
 

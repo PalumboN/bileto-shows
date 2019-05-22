@@ -45,6 +45,11 @@ class Api {
     return this.$http.post("/api/" + path, body).then(getData)
   }
 
+  put(path, body) {
+    var getData = (response) => response.data
+    return this.$http.put("/api/" + path, body).then(getData)
+  }
+
   delete(path) {
     var getData = (response) => response.data
     return this.$http.delete("/api/" + path).then(getData)

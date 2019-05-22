@@ -1,4 +1,4 @@
-<div ng-if="show.site == 'ticketek'" class="panel-body" data-ng-repeat="performance in show.model">
+<!-- <div ng-if="show.site == 'ticketek'" class="panel-body" data-ng-repeat="performance in show.model">
     <div ticketek-performance></div>
 </div>
 <div ng-if="show.site == 'ticketportal'" class="panel-body" data-ng-repeat="performance in show.model.performances">
@@ -6,4 +6,24 @@
 </div>
 <div ng-if="show.site == 'tuentrada'" class="panel-body" data-ng-repeat="performance in show.model">
     <div tuentrada-performance></div>
-</div>
+</div> -->
+
+
+<table class="table table-striped">
+    <tr>
+        <th>Fecha</th>
+        <th>Precio</th> 
+        <th>Sección</th> 
+        <th>Disponibilidad</th>
+        <th>Alerta</th>
+    </tr>
+    <tr data-ng-repeat="ticket in show.tickets">
+        <td class="col col-md-3">{{ticket.date}}</td>
+        <td class="col col-md-2">{{ticket.price}}</td>
+        <td class="col col-md-3">{{ticket.section}}</td>
+        <td class="col col-md-3">{{ticket.availability}}</td>
+        <td class="col col-md-1">
+            <input type="checkbox" data-ng-model="ticket.alert" data-ng-change="ctrl.changeAlerts(show)">
+        </td>
+    </tr>
+</table>

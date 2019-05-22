@@ -50,6 +50,9 @@ module.exports = (db) ->
   app.delete '/api/shows/:job', authMiddleware, ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: true)
 
+  app.put '/api/shows/:job', authMiddleware, ({params, body}, res) ->
+    finish res, Show.findByIdAndUpdate(params.job, alertIds: body.alertIds)
+
   app.post '/api/shows/reopen/:job', authMiddleware, ({params}, res) ->
     finish res, Show.findByIdAndUpdate(params.job, archive: false)
 

@@ -6,6 +6,8 @@ Show = new Schema
   model:
     type: Mixed
     required: true
+  alertIds:
+    type: [String]
   archive:
     type: Boolean
     required: true
