@@ -50,7 +50,7 @@ Show.virtual("shouldAlert").get () -> this.alerts != ""
 
 Show.virtual("alerts").get () -> this.strategy.alerts(this.model)
 
-
+Show.virtual("tickets").get () -> this.strategy.tickets(this.model)
 
 
 Show.virtual("strategy").get () -> 
@@ -61,6 +61,18 @@ Show.virtual("strategy").get () ->
 
 
 class TicketekShow
+  tickets: (model) =>
+    _.flatMap model, (oneModel) =>
+      oneModel.sections.map (section) =>
+        {
+          id: oneModel.id.toString() + section.id.toString()
+          name: oneModel.name + ' - ' + oneModel.author
+          date: oneModel.date
+          section: section.description
+          price: section.full_price
+          availability: section.section_availability
+        }
+
   alerts: (model) =>
     model[0].name + " - " + model[0].date + "\n" +
     _.flatMap(model, "sections")
@@ -68,6 +80,17 @@ class TicketekShow
     .join "\n"
 
 class TuentradaShow
+  tickets: (model) =>
+    model.map (oneModel) =>
+      {
+        id: oneModel.id
+        name: oneModel.name
+        date: oneModel.start_date
+        section: 'UNICA'
+        price: oneModel.min_price
+        availability: oneModel.availability_num
+      }
+
   shouldAlert: (availability_num) -> Number.parseInt(availability_num) < 50
   shouldPause: (availability_num) -> Number.parseInt(availability_num) < 10
 

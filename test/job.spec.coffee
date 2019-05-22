@@ -87,7 +87,7 @@ describe 'Model', ->
   describe 'Ticketek', ->
 
     it 'trasform to tickets', ->
-      ticketekShow.tikets
+      ticketekShow.tickets
       .should.be.eql [
         {
           id: '31750723313'
@@ -102,7 +102,7 @@ describe 'Model', ->
   describe 'TuEntrada', ->
 
     it 'trasform to tickets', ->
-      tuentradaShow.tikets
+      tuentradaShow.tickets
       .should.be.eql [
         {
           id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012A'
@@ -115,7 +115,7 @@ describe 'Model', ->
         {
           id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012B'
           name: 'El Teatro Flores - Divididos - 21Jun2019'
-          date: 'jueves 21 de jun 2019 21:00 hs'
+          date: 'viernes 21 de jun 2019 21:00 hs'
           section: 'UNICA'
           price: '$950,00'
           availability: '30'
@@ -123,7 +123,7 @@ describe 'Model', ->
         {
           id: '44AB5CE3-3A7D-41D2-9145-26FA51B8012C'
           name: 'El Teatro Flores - Divididos - 22Jun2019'
-          date: 'jueves 22 de jun 2019 21:00 hs'
+          date: 'viernes 22 de jun 2019 21:00 hs'
           section: 'UNICA'
           price: '$950,00'
           availability: '5'
