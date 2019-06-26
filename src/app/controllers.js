@@ -44,12 +44,14 @@ class ShowsController extends Controller {
     this.syncing = true
     this.post("shows/sync")
     .then(() => this.loadShows(true))
-    .then(() => this.syncing = false)
+    .finally(() => this.syncing = false)
   }
 
   archive(show) {
+    show.deleting = true
     this.delete(`shows/${show._id}`)
     .then(() => this.loadShows(true))
+    .finally(() => show.deleting = false)
   }
 
   reactive(show) {
