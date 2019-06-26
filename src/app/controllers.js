@@ -76,7 +76,7 @@ class TicketekController extends Controller {
   loadShows() {
     this.quering = true
     this.api.getTicketekShows()
-    .then((it) => { this.shows = it.filter((show) => !_.isEmpty(show))})
+    .then((it) => { this.shows = _.uniqBy(it.filter((show) => !_.isEmpty(show)), "[0].id") })
     .then(() => this.quering = false)
   }
 
@@ -116,7 +116,7 @@ class TuentradaController extends Controller {
   loadShows() {
     this.quering = true
     this.api.getTuentradaShows()
-    .then((it) => { this.shows = it.filter((show) => show && !show[0].error) })
+    .then((it) => { this.shows = _.uniqBy(it.filter((show) => show && !show[0].error), "[0].id") })
     .then(() => this.quering = false)
   }
 
