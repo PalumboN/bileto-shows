@@ -22,7 +22,7 @@ update = (show) ->
   show.lastUpdate = new Date()
   show.save()
 
-doSync = (result, response) ->
+doSync = (result, response) -> #TODO: Sacar a un objeto y testear
   console.log "SYNCING"
   result.sync = _.isEqual response, result.show.toJSON().model
   result.show.model = response
@@ -48,6 +48,6 @@ sync = (show) ->
   .tap ({show, error}) ->
     update show if not error
 
-run = (shows) -> mapSeries shows, sync
+run = (shows) -> shows.map sync
 
 module.exports =  { run }

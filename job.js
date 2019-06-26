@@ -2,7 +2,7 @@ require("coffee-script/register")
 require('./src/globals')
 const request = require('request')
 
-const base = process.env.SELF || "https://bileto-shows.herokuapp.com"
+const base = process.env.SELF || "http://localhost:8083"
 const uri = base + "/api/shows/sync"
 
 console.log("QUERING: " + uri);
