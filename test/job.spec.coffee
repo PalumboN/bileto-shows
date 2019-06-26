@@ -20,6 +20,7 @@ xdescribe 'GET shows', ->
 Show = null
 ticketekShow = null
 tuentradaShow = null
+notFollowTuentradaShow = null
 
 ticketekJson = [
   { 
@@ -72,6 +73,23 @@ tuentradaJson = [ {
   start_date: "viernes 22 de jun 2019 21:00 hs"
 }]
 
+notFollowTuentradaJson = [ {
+  availability_num: "30"
+  availability_status: "S"
+  id: "44ABAAAA-3A7D-41D2-9145-26FA51B8012B"
+  min_price: "$950,00"
+  name: "El Teatro Flores - Los Piojos - 21Jun2019"
+  short_description: "Los Piojos"
+  start_date: "viernes 21 de jun 2019 21:00 hs"
+}, {
+  availability_num: "5"
+  availability_status: "S"
+  id: "44ABAAAA-3A7D-41D2-9145-26FA51B8012C"
+  min_price: "$950,00"
+  name: "El Teatro Flores - Los Piojos - 22Jun2019"
+  short_description: "Los Piojos"
+  start_date: "viernes 22 de jun 2019 21:00 hs"
+}]
 
 describe 'Model', -> 
 
@@ -81,8 +99,16 @@ describe 'Model', ->
     .connect(mongo.uri, { useMongoClient: true })
     .then (db) -> 
       { Show } = require("../src/models/schemas")(db)
-      Show.newTicketek(ticketekJson).then (show) -> ticketekShow = show
-      Show.newTuentrada(tuentradaJson).then (show) -> tuentradaShow = show
+      Show.newTicketek(ticketekJson).then (show) -> 
+        ticketekShow = show
+        ticketekShow.alertIds = _.map ticketekShow.tickets, "id"
+
+      Show.newTuentrada(tuentradaJson).then (show) -> 
+        tuentradaShow = show
+        tuentradaShow.alertIds = _.map tuentradaShow.tickets, "id"
+
+      Show.newTuentrada(notFollowTuentradaJson).then (show) -> 
+        notFollowTuentradaShow = show
 
   describe 'Ticketek', ->
 
@@ -147,3 +173,8 @@ describe 'Model', ->
     it 'should alert for Tu Entrada', ->
       tuentradaShow.shouldAlert
       .should.be.true
+
+    it 'should only alert for following tickets', ->
+      notFollowTuentradaShow.shouldAlert
+      .should.be.false
+
