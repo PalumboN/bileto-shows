@@ -160,11 +160,11 @@ describe 'Model', ->
 
     it 'transform alerts for humans from Ticketek', ->
       telegram.forHumans ticketekShow
-      .should.be.eql "KANKA19NIC - EL KANKA - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 - AVAILABLE"
+      .should.be.eql "KANKA19NIC - EL KANKA - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 ($700.00) - AVAILABLE"
     
     it 'transform alerts for humans from Tu Entrada', ->
       telegram.forHumans tuentradaShow
-      .should.be.eql "El Teatro Flores - Divididos - 21Jun2019 - Quedan 30 entradas disponibles \nEl Teatro Flores - Divididos - 22Jun2019 - Quedan 5 entradas disponibles - ¡PAUSAR EVENTO!"
+      .should.be.eql "El Teatro Flores - Divididos - 21Jun2019 ($950,00) - Quedan 30 entradas disponibles \nEl Teatro Flores - Divididos - 22Jun2019 ($950,00) - Quedan 5 entradas disponibles - ¡PAUSAR EVENTO!"
 
     it 'should alert for Ticketek', ->
       ticketekShow.shouldAlert

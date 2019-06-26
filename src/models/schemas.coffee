@@ -74,7 +74,7 @@ class TicketekShow
     _.map _.groupBy(show.followingTickets, "name"), (sectionTickets) =>
       sectionTickets[0].name + " - " + sectionTickets[0].date + "\n" +
       sectionTickets
-      .map ({section, availability}) -> "#{section} - #{availability}"
+      .map ({section, availability, price}) -> "#{section} ($#{price}) - #{availability}"
       .join('\n')
 
   _toTicket: (oneModel, section) =>
@@ -107,8 +107,8 @@ class TuentradaShow
     show
     .followingTickets
     .filter ({availability}) => this.isTriggered availability
-    .map ({name, availability}) => 
-      "#{name} - Quedan #{availability} entradas disponibles #{if (this.isCritical availability) then '- ¡PAUSAR EVENTO!' else ''}"
+    .map ({name, availability, price}) => 
+      "#{name} (#{price}) - Quedan #{availability} entradas disponibles #{if (this.isCritical availability) then '- ¡PAUSAR EVENTO!' else ''}"
 
 
 
