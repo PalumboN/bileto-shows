@@ -70,11 +70,12 @@ class TicketekShow
       oneModel.sections.map (section) =>
         this._toTicket oneModel, section
 
-  alerts: ({model}) =>
-    _.flatMap model, (oneModel) =>
-      oneModel.name + " - " + oneModel.date + "\n" +
-      oneModel.sections.map ({description, section_availability}) -> 
-        "#{description} - #{section_availability}"
+  alerts: (show) =>
+    _.map _.groupBy(show.followingTickets, "name"), (sectionTickets) =>
+      sectionTickets[0].name + " - " + sectionTickets[0].date + "\n" +
+      sectionTickets
+      .map ({section, availability}) -> "#{section} - #{availability}"
+      .join('\n')
 
   _toTicket: (oneModel, section) =>
     {

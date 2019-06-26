@@ -160,7 +160,7 @@ describe 'Model', ->
 
     it 'transform alerts for humans from Ticketek', ->
       telegram.forHumans ticketekShow
-      .should.be.eql "KANKA19NIC - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 - AVAILABLE"
+      .should.be.eql "KANKA19NIC - EL KANKA - Martes 4/6  Pta 20:30Hs\nGRAL PTA 20:30 - AVAILABLE"
     
     it 'transform alerts for humans from Tu Entrada', ->
       telegram.forHumans tuentradaShow
