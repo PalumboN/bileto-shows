@@ -10,7 +10,7 @@
     
   </div>
 
-  <div class="panel panel-default" data-ng-repeat="show in ctrl.shows">
+  <div class="panel panel-default" data-ng-repeat="show in ctrl.shows | orderBy:'lastUpdate'">
     <div class="container-fluid panel-heading">
       <h3 class="panel-title col col-md-8">{{show.description}} </h3>
       <span class="col col-md-3 text-right" am-time-ago="show.lastUpdate"></span>
