@@ -48,11 +48,13 @@ Show.virtual("name").get () ->
 Show.virtual("description").get () -> 
   this.name + " - " + (this.model.description || this.author || "")
 
-Show.virtual("shouldAlert").get () -> this.alerts != ""
+Show.virtual("shouldAlert").get () -> !_.isEmpty this.alerts
 
-Show.virtual("alerts").get () -> this.strategy.alerts(this.model)
+Show.virtual("alerts").get () -> this.strategy.alerts(this)
 
-Show.virtual("tickets").get () -> this.strategy.tickets(this.model)
+Show.virtual("tickets").get () -> this.strategy.tickets(this)
+
+Show.virtual("followingTickets").get () -> this.tickets.filter(({id}) => this.alertIds.includes(id))
 
 
 Show.virtual("strategy").get () -> 
@@ -63,27 +65,31 @@ Show.virtual("strategy").get () ->
 
 
 class TicketekShow
-  tickets: (model) =>
+  tickets: ({model}) =>
     _.flatMap model, (oneModel) =>
       oneModel.sections.map (section) =>
-        {
-          id: oneModel.id.toString() + section.id.toString()
-          name: oneModel.name + ' - ' + oneModel.author
-          date: oneModel.date
-          section: section.description
-          price: section.full_price
-          availability: section.section_availability
-        }
+        this._toTicket oneModel, section
 
-  alerts: (model) =>
-    model[0].name + " - " + model[0].date + "\n" +
-    _.flatMap(model, "sections")
-    .map ({description, section_availability}) -> "#{description} - #{section_availability}"
-    .join "\n"
+  alerts: ({model}) =>
+    _.flatMap model, (oneModel) =>
+      oneModel.name + " - " + oneModel.date + "\n" +
+      oneModel.sections.map ({description, section_availability}) -> 
+        "#{description} - #{section_availability}"
+
+  _toTicket: (oneModel, section) =>
+    {
+      id: oneModel.id.toString() + section.id.toString()
+      name: oneModel.name + ' - ' + oneModel.author
+      date: oneModel.date
+      section: section.description
+      price: section.full_price
+      availability: section.section_availability
+    }
+
 
 class TuentradaShow
-  tickets: (model) =>
-    model.map (oneModel) =>
+  tickets: ({model}) =>
+    _.map model, (oneModel) =>
       {
         id: oneModel.id
         name: oneModel.name
@@ -93,15 +99,15 @@ class TuentradaShow
         availability: oneModel.availability_num
       }
 
-  shouldAlert: (availability_num) -> Number.parseInt(availability_num) < 50
-  shouldPause: (availability_num) -> Number.parseInt(availability_num) < 10
+  isTriggered: (availability) -> Number.parseInt(availability) < 50
+  isCritical: (availability) -> Number.parseInt(availability) < 10
 
-  alerts: (model) =>
-    model
-    .filter (show) => this.shouldAlert(show.availability_num)
-    .map ({name, availability_num}) => 
-      "#{name} - Quedan #{availability_num} entradas disponibles #{if (this.shouldPause availability_num) then '- ¡PAUSAR EVENTO!' else ''}"
-    .join "\n"
+  alerts: (show) =>
+    show
+    .followingTickets
+    .filter ({availability}) => this.isTriggered availability
+    .map ({name, availability}) => 
+      "#{name} - Quedan #{availability} entradas disponibles #{if (this.isCritical availability) then '- ¡PAUSAR EVENTO!' else ''}"
 
 
 
