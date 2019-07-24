@@ -29,6 +29,8 @@ doSync = (result, response) -> #TODO: Sacar a un objeto y testear
   result.show.model = response
   result.show.failures = []
 
+isHeroku = (error) -> error.toString().includes("TypeError")
+
 sync = (apiResolver, messageSender) -> (show) ->
   console.log "Analizando: " + show.description
   result = {show}
@@ -49,7 +51,7 @@ sync = (apiResolver, messageSender) -> (show) ->
     result.error = err
     result
   .tap ({show, sync, error}) ->
-    return messageSender.sendError error if error?
+    return messageSender.sendError error if error? and not isHeroku(error)
     return messageSender.sendShowChange show if sync
   .tap ({show, error}) ->
     update show if not error
