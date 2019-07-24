@@ -22,6 +22,8 @@ update = (show) ->
   show.save()
 
 doSync = (result, response) -> #TODO: Sacar a un objeto y testear
+  if (_.isEmpty response)
+    throw "Empty response"
   console.log "SYNCING"
   result.sync = not _.isEqual response, result.show.toJSON().model
   result.show.model = response
@@ -30,6 +32,10 @@ doSync = (result, response) -> #TODO: Sacar a un objeto y testear
 sync = (apiResolver, messageSender) -> (show) ->
   console.log "Analizando: " + show.description
   result = {show}
+  if (show.isBroken)
+    console.log "Broken show, skiping..."
+    result.skip = true
+    return Promise.resolve result
 
   apiResolver show
   .getPerformances show.id

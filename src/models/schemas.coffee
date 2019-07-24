@@ -1,6 +1,9 @@
 mongoose = require('mongoose')
+{maxFailures} = require('../config')
+
 Schema = mongoose.Schema
 Mixed = Schema.Types.Mixed
+mongoose.plugin (schema) -> schema.options.usePushEach = true
 
 Show = new Schema
   model:
@@ -50,13 +53,14 @@ Show.virtual("name").get () ->
   this.model[0]?.name
 Show.virtual("description").get () -> 
   this.name + " - " + (this.model.description || this.author || "")
+Show.virtual("isBroken").get () ->
+  this.failures?.length > maxFailures
+
 
 Show.virtual("shouldAlert").get () -> !_.isEmpty this.alerts
-
 Show.virtual("alerts").get () -> this.strategy.alerts(this)
 
 Show.virtual("tickets").get () -> this.strategy.tickets(this)
-
 Show.virtual("followingTickets").get () -> this.tickets.filter(({id}) => this.alertIds.includes(id))
 
 

@@ -1,5 +1,6 @@
 module.exports =
   port: process.env.PORT || 8083
+  maxFailures: process.env.MAX_FAILURES || 5
   mongo:
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/bileto-shows'
   ticketek:

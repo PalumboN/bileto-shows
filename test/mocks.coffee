@@ -5,7 +5,7 @@ module.exports.ApiMock = class
         if (@shouldError)
             Promise.resolve [error: 'MockError']
         else  
-            Promise.resolve []
+            Promise.resolve [{}]
 
 module.exports.TelegramMock = class
     sendError: () -> Promise.resolve()

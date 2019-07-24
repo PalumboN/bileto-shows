@@ -112,6 +112,13 @@ describe 'Model', ->
       Show.newTuentrada(notFollowTuentradaJson).then (show) -> 
         notFollowTuentradaShow = show
 
+  after ->
+    mongoose
+    .connect(mongo.uri, { useMongoClient: true })
+    .then (db) -> 
+      { Show } = require("../src/models/schemas")(db)
+      Show.remove {}
+
   describe 'Ticketek', ->
 
     it 'trasform to tickets', ->
@@ -191,9 +198,12 @@ describe 'Model', ->
         .value()
         .should.be.eql [count, count]
 
+    setFailures = (failures) ->
+      [tuentradaShow, ticketekShow].forEach (show) -> show.failures = failures
+
+
     beforeEach ->
-      [tuentradaShow, ticketekShow]
-      .forEach (show) -> show.failures = ["ERROR"]
+      setFailures ["ERROR"]
 
     it 'should sync', ->
       Promise.all runJob()
@@ -214,3 +224,10 @@ describe 'Model', ->
     it 'on error should remember', ->
       Promise.all runJob({ shouldError: true })
       .tap (results) -> validateFailures 2
+
+    it 'should skip for broken shows', ->
+      setFailures _.times(100, "ERROR")
+      Promise.all runJob({ shouldError: true })
+      .tap (results) -> 
+        _.every results, 'skip'
+        .should.be.true
