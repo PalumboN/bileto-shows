@@ -13,7 +13,11 @@
   <div class="panel panel-default" data-ng-repeat="show in ctrl.shows | orderBy:'lastUpdate'">
     <div class="container-fluid panel-heading">
       <h3 class="panel-title col col-md-8">{{show.description}} </h3>
-      <span class="col col-md-3 text-right" am-time-ago="show.lastUpdate"></span>
+      <div class="col col-md-3 text-right">
+        <span class="text-right" am-time-ago="show.lastUpdate"></span>
+        <span class="text-warning" data-ng-show="show.failures.length > 0"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> {{show.failures.length}}</span>
+        <span class="text-danger" data-ng-show="show.isBroken"><i class="fa fa-pause-circle" aria-hidden="true"></i></span>
+      </div>
       <a href="" class="col col-md-1 text-right" data-ng-show="!show.deleting" data-ng-click="ctrl.archive(show)"><i class="fa fa-trash fa-lg text-danger" aria-hidden="true"></i></a>
       <i class="fa fa-spinner fa-pulse fa-2x fa-fw" data-ng-show="show.deleting"></i>
     </div>
