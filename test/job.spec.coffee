@@ -3,6 +3,8 @@ mongoose = require('mongoose')
 telegram = require('../src/models/telegram')
 Ticketek = require('../src/models/ticketek')
 tuentrada = require('../src/models/tuentrada')
+{ run } = require('../src/job')
+{ ApiMock, TelegramMock } = require('./mocks')
 
 ticketek = new Ticketek()
   
@@ -93,7 +95,7 @@ notFollowTuentradaJson = [ {
 
 describe 'Model', -> 
 
-  before ->
+  beforeEach ->
     this.timeout 5000
     mongoose
     .connect(mongo.uri, { useMongoClient: true })
@@ -178,3 +180,37 @@ describe 'Model', ->
       notFollowTuentradaShow.shouldAlert
       .should.be.false
 
+  describe 'Job', -> 
+    runJob = (params = {}) -> 
+      run([tuentradaShow, ticketekShow], (() -> new ApiMock(params)), new TelegramMock())
+
+    validateFailures = (count) ->
+        _([tuentradaShow, ticketekShow]) 
+        .map 'failures'
+        .map 'length'
+        .value()
+        .should.be.eql [count, count]
+
+    beforeEach ->
+      [tuentradaShow, ticketekShow]
+      .forEach (show) -> show.failures = ["ERROR"]
+
+    it 'should sync', ->
+      Promise.all runJob()
+      .tap (results) -> 
+        _.every results, 'sync'
+        .should.be.true
+
+    it 'on sync should clean errors', ->
+      Promise.all runJob()
+      .tap (results) -> validateFailures 0
+
+    it 'on error should not sync', ->
+      Promise.all runJob({ shouldError: true })
+      .tap (results) -> 
+        _.every results, 'sync'
+        .should.be.false
+
+    it 'on error should remember', ->
+      Promise.all runJob({ shouldError: true })
+      .tap (results) -> validateFailures 2

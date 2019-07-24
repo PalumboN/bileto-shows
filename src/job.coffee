@@ -11,10 +11,9 @@ getApi = ({site}) ->
     when 'tuentrada' then tuentrada
 
 analiseError = ({show}, {error, statusCode}) ->
-  if statusCode == 404
-    show.archive = true
-    error += " SHOW ARCHIVADO"
-    show.save()
+  if not show.failures then show.failures = []  
+  show.failures.push error
+  show.save()
   throw error
 
 update = (show) ->
@@ -24,14 +23,15 @@ update = (show) ->
 
 doSync = (result, response) -> #TODO: Sacar a un objeto y testear
   console.log "SYNCING"
-  result.sync = _.isEqual response, result.show.toJSON().model
+  result.sync = not _.isEqual response, result.show.toJSON().model
   result.show.model = response
+  result.show.failures = []
 
-sync = (show) ->
+sync = (apiResolver, messageSender) -> (show) ->
   console.log "Analizando: " + show.description
   result = {show}
 
-  getApi show
+  apiResolver show
   .getPerformances show.id
   .then (response) ->
     console.log "Before SYNC", {response}
@@ -43,11 +43,11 @@ sync = (show) ->
     result.error = err
     result
   .tap ({show, sync, error}) ->
-    return telegram.sendError error if error?
-    return telegram.sendShowChange show if not sync
+    return messageSender.sendError error if error?
+    return messageSender.sendShowChange show if sync
   .tap ({show, error}) ->
     update show if not error
 
-run = (shows) -> shows.map sync
+run = (shows, apiResolver = getApi, messageSender = telegram) -> shows.map sync(apiResolver, messageSender)
 
 module.exports =  { run }

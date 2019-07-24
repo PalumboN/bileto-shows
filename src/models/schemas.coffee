@@ -19,6 +19,9 @@ Show = new Schema
   lastUpdate:
     type: Date
     required: true
+  failures:
+    type: [String]
+    default: []
 ,
   toObject:
     virtuals: true
