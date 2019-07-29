@@ -23,7 +23,7 @@ update = (show) ->
 
 doSync = (result, response) -> #TODO: Sacar a un objeto y testear
   if (_.isEmpty response)
-    throw "Empty response"
+    analiseError result, {error: "Empty response - " + result.show.description}
   console.log "SYNCING"
   result.sync = not _.isEqual response, result.show.toJSON().model
   result.show.model = response
